@@ -1156,7 +1156,7 @@ about:
   version: "Version"
   source: "Source"
   api_reference: "API reference"
-  api_link: "openapi.json"
+  api_link: "api.json"
   mcp_reference: "MCP reference"
   mcp_link: "mcp.json"
   instructions_link: "How to trace, measure and review: Instructions"
@@ -1453,10 +1453,10 @@ api_keys:
   role_label: "Permission"
   role_user: "user"
   role_admin: "admin (can manage accounts)"
-  # Under the description, with a link to the API reference: openapi.json in
+  # Under the description, with a link to the API reference: api.json in
   # app.repo, or this server's own copy.
   spec_text: "What a key can call:"
-  spec_link: "API reference (openapi.json)"
+  spec_link: "API reference (api.json)"
   # Beside it when app.repo is set: the same reference as tables, config/api.md,
   # which the repository's site shows as a readable page.
   doc_link: "readable version (api.md)"
@@ -1498,6 +1498,9 @@ mcp:
   # in app.repo, or this server's own copy.
   spec_text: "What an agent can call:"
   spec_link: "MCP reference (mcp.json)"
+  # Beside it when app.repo is set: the same reference as tables, config/mcp.md,
+  # which the repository's site shows as a readable page.
+  doc_link: "readable version (mcp.md)"
   endpoint_label: "Endpoint"
   client_label: "Set up for"
   # Also the name a new key is given, until someone types another.

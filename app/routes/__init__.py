@@ -39,7 +39,8 @@ from app.apidocs.route import Declared, declared_of
 from app.core.config import Config
 from app.core.security import RequireAdmin, RequireLogin, RequireSession
 from app.core.security import Guard
-from app.core.security import RequireAPIKey, RequireOwner
+from app.core.security import RequireAPIKey
+from app.core.security import RequireOwner
 from app.core.static_files import StaticServer
 from app.routes import (
     account,

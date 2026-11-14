@@ -18,7 +18,6 @@ This file is generated: do not edit it. Change the docs next to the handlers and
 - [AIS](#ais)
 - [About](#about)
 - [Schemas](#schemas)
-- [MCP tools](#mcp-tools)
 
 ## Calling the API
 
@@ -76,7 +75,7 @@ A link that signs your own account in on a browser or another device. Only a key
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`create_my_login_link`](#create_my_login_link) |
+| MCP tool | [`create_my_login_link`](mcp.md#create_my_login_link) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -107,7 +106,7 @@ Void your account's live login link without making a new one. Devices it already
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`cancel_my_login_link`](#cancel_my_login_link) |
+| MCP tool | [`cancel_my_login_link`](mcp.md#cancel_my_login_link) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -205,7 +204,7 @@ Change your own display name (1-80 characters). expect, when given, is the name 
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`rename_account`](#rename_account) |
+| MCP tool | [`rename_account`](mcp.md#rename_account) |
 | Errors | 400, 401, 403, 409, 429, 503 |
 
 **Request body**
@@ -232,7 +231,7 @@ Where your account is signed in, a page at a time: id, when it started and was l
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_my_sessions`](#list_my_sessions) |
+| MCP tool | [`list_my_sessions`](mcp.md#list_my_sessions) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Parameters**
@@ -257,7 +256,7 @@ Sign out every other device
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`revoke_my_other_sessions`](#revoke_my_other_sessions) |
+| MCP tool | [`revoke_my_other_sessions`](mcp.md#revoke_my_other_sessions) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -282,7 +281,7 @@ Give one of your devices a name (at most 80 characters; empty clears it). expect
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`label_my_session`](#label_my_session) |
+| MCP tool | [`label_my_session`](mcp.md#label_my_session) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -315,7 +314,7 @@ End one of your signed-in sessions; that browser has to sign in again.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`revoke_my_session`](#revoke_my_session) |
+| MCP tool | [`revoke_my_session`](mcp.md#revoke_my_session) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -345,7 +344,7 @@ Replace the caller's rebound keyboard shortcuts with the map sent (static/js/sho
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`set_shortcuts`](#set_shortcuts) |
+| MCP tool | [`set_shortcuts`](mcp.md#set_shortcuts) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -370,7 +369,7 @@ Switch to another theme from your list (or the defaults), by its id.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`set_theme`](#set_theme) |
+| MCP tool | [`set_theme`](mcp.md#set_theme) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -391,12 +390,12 @@ Switch to another theme from your list (or the defaults), by its id.
 
 Replace your own themes
 
-Replace your whole list of color themes (1 to 40) and pick the one you use. themes: null goes back to following the app's defaults. A theme is the Theme schema in the API reference (config/openapi.json): id, name, mode light|dark, accent, second, and optional colors as #rrggbb.
+Replace your whole list of color themes (1 to 40) and pick the one you use. themes: null goes back to following the app's defaults. A theme is the Theme schema in the API reference (config/api.json): id, name, mode light|dark, accent, second, and optional colors as #rrggbb.
 
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`set_themes`](#set_themes) |
+| MCP tool | [`set_themes`](mcp.md#set_themes) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -549,7 +548,7 @@ The account this API key belongs to, the role it acts with (role -- never higher
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`whoami`](#whoami) |
+| MCP tool | [`whoami`](mcp.md#whoami) |
 | Errors | 401, 429, 503 |
 
 **Reply 200**: Success
@@ -565,7 +564,7 @@ People with an active account, a page at a time: id and display name.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_team`](#list_team) |
+| MCP tool | [`list_team`](mcp.md#list_team) |
 | Errors | 400, 401, 429, 503 |
 
 **Parameters**
@@ -1090,7 +1089,7 @@ The theme list everyone without their own list sees. themes is null while the bu
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_get_theme_defaults`](#admin_get_theme_defaults) |
+| MCP tool | [`admin_get_theme_defaults`](mcp.md#admin_get_theme_defaults) |
 | Errors | 401, 403, 404, 429, 503 |
 
 **Reply 200**: Success
@@ -1108,7 +1107,7 @@ Replace the theme list everyone without their own list sees, 1 to 40 themes in t
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_set_theme_defaults`](#admin_set_theme_defaults) |
+| MCP tool | [`admin_set_theme_defaults`](mcp.md#admin_set_theme_defaults) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Request body**
@@ -1134,7 +1133,7 @@ Accounts, a page at a time, including disabled ones, with each one's role and wh
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_list_users`](#admin_list_users) |
+| MCP tool | [`admin_list_users`](mcp.md#admin_list_users) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Parameters**
@@ -1164,7 +1163,7 @@ Make a new account and its first login link, to hand to the person. role is admi
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_create_user`](#admin_create_user) |
+| MCP tool | [`admin_create_user`](mcp.md#admin_create_user) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -1198,7 +1197,7 @@ Void an account's live login link without making a new one: a link that went som
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_cancel_login_link`](#admin_cancel_login_link) |
+| MCP tool | [`admin_cancel_login_link`](mcp.md#admin_cancel_login_link) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1229,7 +1228,7 @@ Remove an account for good, with its sessions, login link and API keys.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_delete_user`](#admin_delete_user) |
+| MCP tool | [`admin_delete_user`](mcp.md#admin_delete_user) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1260,7 +1259,7 @@ Switch an account off (disabled: true) or back on (false). Disabling signs it ou
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_set_user_disabled`](#admin_set_user_disabled) |
+| MCP tool | [`admin_set_user_disabled`](mcp.md#admin_set_user_disabled) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1291,7 +1290,7 @@ For someone who lost their device or their link: a fresh login link for their ac
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_reissue_login`](#admin_reissue_login) |
+| MCP tool | [`admin_reissue_login`](mcp.md#admin_reissue_login) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1328,7 +1327,7 @@ Change another account's display name (1-80 characters). Only the owner renames 
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_rename_user`](#admin_rename_user) |
+| MCP tool | [`admin_rename_user`](mcp.md#admin_rename_user) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -1361,7 +1360,7 @@ For someone who lost both their phone and their recovery codes: switches their t
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_reset_two_factor`](#admin_reset_two_factor) |
+| MCP tool | [`admin_reset_two_factor`](mcp.md#admin_reset_two_factor) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1391,7 +1390,7 @@ For an account that may be compromised: ends every session and voids its live lo
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_revoke_access`](#admin_revoke_access) |
+| MCP tool | [`admin_revoke_access`](mcp.md#admin_revoke_access) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1422,7 +1421,7 @@ Make an account an admin or an ordinary user. Only the owner takes an admin's ri
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_set_user_role`](#admin_set_user_role) |
+| MCP tool | [`admin_set_user_role`](mcp.md#admin_set_user_role) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1454,7 +1453,7 @@ Where an account is signed in: every session, with when it started and was last 
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_list_user_sessions`](#admin_list_user_sessions) |
+| MCP tool | [`admin_list_user_sessions`](mcp.md#admin_list_user_sessions) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1480,7 +1479,7 @@ Sign out one of an account's devices
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_revoke_user_session`](#admin_revoke_user_session) |
+| MCP tool | [`admin_revoke_user_session`](mcp.md#admin_revoke_user_session) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1528,7 +1527,7 @@ Group invite links, a page at a time: label, places used and left, expiry, and w
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_list_invite_links`](#admin_list_invite_links) |
+| MCP tool | [`admin_list_invite_links`](mcp.md#admin_list_invite_links) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1558,7 +1557,7 @@ One link for a group: each person who opens it joins as a new user, up to max_us
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_create_invite_link`](#admin_create_invite_link) |
+| MCP tool | [`admin_create_invite_link`](mcp.md#admin_create_invite_link) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Request body**
@@ -1595,7 +1594,7 @@ Take an invite link off the list and stop it working. The accounts it made stay.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_delete_invite_link`](#admin_delete_invite_link) |
+| MCP tool | [`admin_delete_invite_link`](mcp.md#admin_delete_invite_link) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1625,7 +1624,7 @@ Set how many people the link may take in (never fewer than have joined) and, whe
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_set_invite_link_limits`](#admin_set_invite_link_limits) |
+| MCP tool | [`admin_set_invite_link_limits`](mcp.md#admin_set_invite_link_limits) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1655,7 +1654,7 @@ Change the label people see on an invite link's join page (1-80 characters). exp
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_rename_invite_link`](#admin_rename_invite_link) |
+| MCP tool | [`admin_rename_invite_link`](mcp.md#admin_rename_invite_link) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -1688,7 +1687,7 @@ Bring back an invite link deleted in the last few minutes, working as before. Th
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_restore_invite_link`](#admin_restore_invite_link) |
+| MCP tool | [`admin_restore_invite_link`](mcp.md#admin_restore_invite_link) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -1716,7 +1715,7 @@ Stop an invite link from letting anyone else join or sign in through it. Account
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_revoke_invite_link`](#admin_revoke_invite_link) |
+| MCP tool | [`admin_revoke_invite_link`](mcp.md#admin_revoke_invite_link) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -1744,7 +1743,7 @@ Switch an invite link back on
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`admin_switch_on_invite_link`](#admin_switch_on_invite_link) |
+| MCP tool | [`admin_switch_on_invite_link`](mcp.md#admin_switch_on_invite_link) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -2172,13 +2171,27 @@ Allow or block an account's password
 
 | Method | Path | Summary | Who may call |
 |---|---|---|---|
+| GET | [`/api/api.json`](#get-apiapijson) | This document | browser session or API key, anyone signed in |
 | GET | [`/api/health`](#get-apihealth) | Is the process up | anyone |
 | GET | [`/api/mcp.json`](#get-apimcpjson) | The MCP tools: every tool /mcp has, its arguments, and the route it stands for | browser session or API key, anyone signed in |
-| GET | [`/api/openapi.json`](#get-apiopenapijson) | This document | browser session or API key, anyone signed in |
 | GET | [`/api/ready`](#get-apiready) | Can the server do real work | anyone |
 | GET | [`/mcp`](#get-mcp) | Refused: this server has no stream | anyone |
 | POST | [`/mcp`](#post-mcp) | Model Context Protocol, at the key's role | API key only, anyone signed in |
 | DELETE | [`/mcp`](#delete-mcp) | Refused: this server keeps no sessions | anyone |
+
+### GET /api/api.json
+
+This document
+
+|  |  |
+|---|---|
+| Who may call | browser session or API key, anyone signed in |
+| MCP tool | None, HTTP only: The API reference itself; GET /api/mcp.json is the MCP one. |
+| Errors | 401, 404, 429, 503 |
+
+**Reply 200**: Success
+
+An empty object.
 
 ### GET /api/health
 
@@ -2203,20 +2216,6 @@ The MCP tools: every tool /mcp has, its arguments, and the route it stands for
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
 | MCP tool | None, HTTP only: The MCP reference itself; tools/list gives the same list. |
-| Errors | 401, 404, 429, 503 |
-
-**Reply 200**: Success
-
-An empty object.
-
-### GET /api/openapi.json
-
-This document
-
-|  |  |
-|---|---|
-| Who may call | browser session or API key, anyone signed in |
-| MCP tool | None, HTTP only: The API reference itself; GET /api/mcp.json is the MCP one. |
 | Errors | 401, 404, 429, 503 |
 
 **Reply 200**: Success
@@ -2379,7 +2378,7 @@ The auto runs the server has done since it started, newest first. ?batch=<id> na
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_auto_runs`](#list_auto_runs) |
+| MCP tool | [`list_auto_runs`](mcp.md#list_auto_runs) |
 | Errors | 400, 401, 429, 503 |
 
 **Parameters**
@@ -2403,7 +2402,7 @@ What a run uses unless it says otherwise (static/js/settings.js defaults), and w
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`auto_defaults`](#auto_defaults) |
+| MCP tool | [`auto_defaults`](mcp.md#auto_defaults) |
 | Errors | 401, 429, 503 |
 
 **Reply 200**: Success
@@ -2428,7 +2427,7 @@ How far the run has got: state (queued, running, finished, stopped, failed), don
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`get_auto_run`](#get_auto_run) |
+| MCP tool | [`get_auto_run`](mcp.md#get_auto_run) |
 | Errors | 400, 401, 404, 429, 503 |
 
 **Parameters**
@@ -2450,7 +2449,7 @@ Stops after the image it is on; what it saved stays. Whoever started it, or an a
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`cancel_auto_run`](#cancel_auto_run) |
+| MCP tool | [`cancel_auto_run`](mcp.md#cancel_auto_run) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -2478,7 +2477,7 @@ Every batch with its progress: uploads, completion, per assignee, and any auto r
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_batches`](#list_batches) |
+| MCP tool | [`list_batches`](mcp.md#list_batches) |
 | Errors | 401, 429, 503 |
 
 **Reply 200**: Success
@@ -2553,7 +2552,7 @@ Body: {name}: an empty batch, its images added afterwards.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`create_batch`](#create_batch) |
+| MCP tool | [`create_batch`](mcp.md#create_batch) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -2630,7 +2629,7 @@ Body: {ids, folder_id}: those batches into that folder, null for the top (admins
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`move_batches`](#move_batches) |
+| MCP tool | [`move_batches`](mcp.md#move_batches) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -2656,7 +2655,7 @@ Body: {ids}: the team's priority order, first on top (admins).
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`order_batches`](#order_batches) |
+| MCP tool | [`order_batches`](mcp.md#order_batches) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -2715,7 +2714,7 @@ Body: {name, files: [{name, rel, sha, size}], translations?: [{dir, text}]} -- a
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`create_batch_from_files`](#create_batch_from_files) |
+| MCP tool | [`create_batch_from_files`](mcp.md#create_batch_from_files) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -2763,7 +2762,7 @@ One batch
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`get_batch`](#get_batch) |
+| MCP tool | [`get_batch`](mcp.md#get_batch) |
 | Errors | 400, 401, 404, 429, 503 |
 
 **Parameters**
@@ -2824,7 +2823,7 @@ New random names for one folder of the batch (admins); its results, done marks, 
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`rerandomize_add`](#rerandomize_add) |
+| MCP tool | [`rerandomize_add`](mcp.md#rerandomize_add) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -2853,7 +2852,7 @@ Body: {archived}: archive the batch (hidden, results kept) or bring it back.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`archive_batch`](#archive_batch) |
+| MCP tool | [`archive_batch`](mcp.md#archive_batch) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -2882,7 +2881,7 @@ Body: {shares: [{user_id, percent}]}: split the batch among these people (admins
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`assign_batch`](#assign_batch) |
+| MCP tool | [`assign_batch`](mcp.md#assign_batch) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -2913,7 +2912,7 @@ Body: {general?, settings?, threshold?, engine?, skip_done?, mark_done?, images?
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`start_auto_run`](#start_auto_run) |
+| MCP tool | [`start_auto_run`](mcp.md#start_auto_run) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -2974,7 +2973,7 @@ What a backup ZIP holds besides the image files. Admins only: it has the origina
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`get_backup`](#get_backup) |
+| MCP tool | [`get_backup`](mcp.md#get_backup) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -2994,7 +2993,7 @@ A batch's channels
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`batch_channels`](#batch_channels) |
+| MCP tool | [`batch_channels`](mcp.md#batch_channels) |
 | Errors | 400, 401, 404, 429, 503 |
 
 **Parameters**
@@ -3052,7 +3051,7 @@ Body: {image, done}: mark an image done by hand (shared progress).
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`set_image_done`](#set_image_done) |
+| MCP tool | [`set_image_done`](mcp.md#set_image_done) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3084,7 +3083,7 @@ Body: {after?: result id, limit?: 1-50 (default 10), with_soma?: only AIS whose 
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`fill_missing_areas`](#fill_missing_areas) |
+| MCP tool | [`fill_missing_areas`](mcp.md#fill_missing_areas) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3120,7 +3119,7 @@ Body: {keys, included}: include these images, or leave them out, for the whole t
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`set_images_included`](#set_images_included) |
+| MCP tool | [`set_images_included`](mcp.md#set_images_included) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3150,7 +3149,7 @@ A batch's channel layouts
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`get_channel_layouts`](#get_channel_layouts) |
+| MCP tool | [`get_channel_layouts`](mcp.md#get_channel_layouts) |
 | Errors | 400, 401, 404, 429, 503 |
 
 **Parameters**
@@ -3194,7 +3193,7 @@ Body: {add?, channels: [{layout, roles}], stack?: {z_step_um, pixel_um}, pixel_u
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`set_channel_roles`](#set_channel_roles) |
+| MCP tool | [`set_channel_roles`](mcp.md#set_channel_roles) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3275,7 +3274,7 @@ Body: {name}. Its accepted AIS carry the new name too.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`rename_batch`](#rename_batch) |
+| MCP tool | [`rename_batch`](mcp.md#rename_batch) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3304,7 +3303,7 @@ Body: {scope: all | auto}: delete the batch's results (admins), to run it again.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`reset_batch_auto`](#reset_batch_auto) |
+| MCP tool | [`reset_batch_auto`](mcp.md#reset_batch_auto) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3337,7 +3336,7 @@ Per image: files on the server, accepted AIS, done, duplicate, assignee.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`batch_status`](#batch_status) |
+| MCP tool | [`batch_status`](mcp.md#batch_status) |
 | Errors | 400, 401, 404, 429, 503 |
 
 **Parameters**
@@ -3376,7 +3375,7 @@ Body: {text}: a __Translation.txt for a batch blinded somewhere else (admins): t
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`load_translation`](#load_translation) |
+| MCP tool | [`load_translation`](mcp.md#load_translation) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3405,7 +3404,7 @@ The batch's __Translation.txt (admins): original/random per file.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`get_translation`](#get_translation) |
+| MCP tool | [`get_translation`](mcp.md#get_translation) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3427,7 +3426,7 @@ Each image's original name, saved treatment and guessed one (admins).
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`get_treatments`](#get_treatments) |
+| MCP tool | [`get_treatments`](mcp.md#get_treatments) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3459,7 +3458,7 @@ Body: {treatments: {key: name}} (admins); "" takes one off.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`set_treatments`](#set_treatments) |
+| MCP tool | [`set_treatments`](mcp.md#set_treatments) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3498,7 +3497,7 @@ Body: {files: [{name, rel, sha, size, modified?}], randomize?, add_name?, transl
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`add_files_to_batch`](#add_files_to_batch) |
+| MCP tool | [`add_files_to_batch`](mcp.md#add_files_to_batch) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -3554,7 +3553,7 @@ Body: {batch_ids, labels?, tests?, units?, design?, sheets?, plots?}: the batche
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`compare_batches`](#compare_batches) |
+| MCP tool | [`compare_batches`](mcp.md#compare_batches) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -3583,7 +3582,7 @@ Auto mode. Body: {processed, raw?, threshold?, settings?, start?, exclude?: [[[x
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`detect_image`](#detect_image) |
+| MCP tool | [`detect_image`](mcp.md#detect_image) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -3620,7 +3619,7 @@ The file's bytes as application/octet-stream with the CSRF token in X-CSRF-Token
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`upload_instructions`](#upload_instructions), [`files_stored`](#files_stored) |
+| MCP tool | [`upload_instructions`](mcp.md#upload_instructions), [`files_stored`](mcp.md#files_stored) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Parameters**
@@ -3918,7 +3917,7 @@ An image for the viewer
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`get_image`](#get_image) |
+| MCP tool | [`get_image`](mcp.md#get_image) |
 | Errors | 400, 401, 404, 429, 503 |
 
 **Parameters**
@@ -3940,7 +3939,7 @@ Every folder: id, name, parent_id (null at the top), position.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_folders`](#list_folders) |
+| MCP tool | [`list_folders`](mcp.md#list_folders) |
 | Errors | 401, 429, 503 |
 
 **Reply 200**: Success
@@ -3965,7 +3964,7 @@ Body: {name, parent_id}: a new folder, first in its parent (null: the top) (admi
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`create_folder`](#create_folder) |
+| MCP tool | [`create_folder`](mcp.md#create_folder) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -3997,7 +3996,7 @@ Body: {parent_id, ids} (admins).
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`order_folders`](#order_folders) |
+| MCP tool | [`order_folders`](mcp.md#order_folders) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -4054,7 +4053,7 @@ Body: {parent_id}: null for the top; not into itself or anything inside it (admi
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`move_folder`](#move_folder) |
+| MCP tool | [`move_folder`](mcp.md#move_folder) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -4091,7 +4090,7 @@ Body: {name} (admins).
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`rename_folder`](#rename_folder) |
+| MCP tool | [`rename_folder`](mcp.md#rename_folder) |
 | Errors | 400, 401, 403, 404, 429, 503 |
 
 **Parameters**
@@ -4510,7 +4509,7 @@ The team's measurement types for the Measure tool's Type picker.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_measure_types`](#list_measure_types) |
+| MCP tool | [`list_measure_types`](mcp.md#list_measure_types) |
 | Errors | 401, 429, 503 |
 
 **Reply 200**: Success
@@ -4528,7 +4527,7 @@ Body: {types: [name, ...]}: the team's new list (admins).
 |  |  |
 |---|---|
 | Who may call | browser session or API key, admins |
-| MCP tool | [`set_measure_types`](#set_measure_types) |
+| MCP tool | [`set_measure_types`](mcp.md#set_measure_types) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -4553,7 +4552,7 @@ Recorded measurements
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_measurements`](#list_measurements) |
+| MCP tool | [`list_measurements`](mcp.md#list_measurements) |
 | Errors | 400, 401, 429, 503 |
 
 **Parameters**
@@ -4577,7 +4576,7 @@ Body: {batch_id, image, measurement}: a line recorded on an image.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`add_measurement`](#add_measurement) |
+| MCP tool | [`add_measurement`](mcp.md#add_measurement) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -4610,7 +4609,7 @@ Delete a measurement
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`delete_measurement`](#delete_measurement) |
+| MCP tool | [`delete_measurement`](mcp.md#delete_measurement) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -4644,7 +4643,7 @@ Body: {measurement}: a recorded line's new ends, length and label.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`update_measurement`](#update_measurement) |
+| MCP tool | [`update_measurement`](mcp.md#update_measurement) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -4683,7 +4682,7 @@ The Batches screen's report (report.xlsx) as JSON sheets, each {columns, rows}: 
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`export_report`](#export_report) |
+| MCP tool | [`export_report`](mcp.md#export_report) |
 | Errors | 400, 401, 404, 429, 503 |
 
 **Parameters**
@@ -4715,7 +4714,7 @@ Accepted AIS
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`list_results`](#list_results) |
+| MCP tool | [`list_results`](mcp.md#list_results) |
 | Errors | 400, 401, 429, 503 |
 
 **Parameters**
@@ -4739,7 +4738,7 @@ Body: {batch_id, image, row} with row the accepted trace's numbers.
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`save_result`](#save_result) |
+| MCP tool | [`save_result`](mcp.md#save_result) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -4789,7 +4788,7 @@ Delete an accepted AIS
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`delete_result`](#delete_result) |
+| MCP tool | [`delete_result`](mcp.md#delete_result) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -4823,7 +4822,7 @@ Body: {soma}: an accepted AIS's distance to its soma (the Measure tool), or null
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`set_result_soma`](#set_result_soma) |
+| MCP tool | [`set_result_soma`](mcp.md#set_result_soma) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -4861,7 +4860,7 @@ Body: {row}: an accepted AIS traced again (the Edit tool). It keeps its number a
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`update_result`](#update_result) |
+| MCP tool | [`update_result`](mcp.md#update_result) |
 | Errors | 400, 401, 403, 404, 409, 429, 503 |
 
 **Parameters**
@@ -4891,7 +4890,7 @@ Body: {processed, raw?, click: [x, y], click2?: [x, y], threshold?, settings?: {
 |  |  |
 |---|---|
 | Who may call | browser session or API key, anyone signed in |
-| MCP tool | [`trace_click`](#trace_click) |
+| MCP tool | [`trace_click`](mcp.md#trace_click) |
 | Errors | 400, 401, 403, 429, 503 |
 
 **Request body**
@@ -5309,7 +5308,7 @@ One of these:
 | `matlab_path` | string | no |  | Where MATLAB is on your computer, for your replay zips. Browser sessions only. |
 | `mcp_enabled` | boolean | yes |  | server.mcp: whether POST /mcp answers. |
 | `mcp_url` | string | yes |  | Where to read the MCP reference: config/mcp.json in app.repo, or /api/mcp.json when there is no repo. Only with server.mcp on. |
-| `openapi_url` | string | yes |  | Where to read this API's reference: config/openapi.json in app.repo, or /api/openapi.json when there is no repo. |
+| `openapi_url` | string | yes |  | Where to read this API's reference: config/api.json in app.repo, or /api/api.json when there is no repo. |
 | `password_blocked` | boolean | yes |  |  |
 | `passwords_enabled` | boolean | yes |  |  |
 | `repo` | string | yes |  | app.repo without a trailing / or .git: where the source lives. Empty when it is not set. |
@@ -5513,1720 +5512,3 @@ One of these:
 | `role` | string | yes | one of `admin`, `user` |  |
 | `two_factor` | boolean | yes |  |  |
 | `username` | string | yes |  | Empty until a password is set. |
-
-## MCP tools
-
-Every tool POST /mcp offers. Written by scripts/api_docs.sh from the registered tools; do not edit by hand. A key sees the tools its role allows (adminOnly ones need an admin key), and a tool whose feature is switched off answers like one that does not exist. route is the HTTP route the tool stands for, with the same rules; http_only are the routes a key may call that have no tool, and why.
-
-|  |  |
-|---|---|
-| Endpoint | `POST /mcp` |
-| Transport | Streamable HTTP, stateless: one JSON-RPC message per POST, a JSON reply |
-| Auth | Authorization: Bearer <API key> |
-
-| Tool | Route | Who | What |
-|---|---|---|---|
-| [`admin_cancel_login_link`](#admin_cancel_login_link) | `POST /api/admin/users/{user_id}/cancel-login-link` | admin keys | Stop an account's login link working (admin) |
-| [`admin_create_invite_link`](#admin_create_invite_link) | `POST /api/admin/invite-links` | admin keys | Create an invite link (admin) |
-| [`admin_create_user`](#admin_create_user) | `POST /api/admin/users` | admin keys | Create an account (admin) |
-| [`admin_delete_invite_link`](#admin_delete_invite_link) | `POST /api/admin/invite-links/{link_id}/delete` | admin keys | Delete an invite link (admin) |
-| [`admin_delete_user`](#admin_delete_user) | `POST /api/admin/users/{user_id}/delete` | admin keys | Delete an account (admin) |
-| [`admin_get_theme_defaults`](#admin_get_theme_defaults) | `GET /api/admin/theme-defaults` | admin keys | Default themes (admin) |
-| [`admin_list_invite_links`](#admin_list_invite_links) | `GET /api/admin/invite-links` | admin keys | List invite links (admin) |
-| [`admin_list_user_sessions`](#admin_list_user_sessions) | `GET /api/admin/users/{user_id}/sessions` | admin keys | An account's signed-in devices (admin) |
-| [`admin_list_users`](#admin_list_users) | `GET /api/admin/users` | admin keys | List users (admin) |
-| [`admin_reissue_login`](#admin_reissue_login) | `POST /api/admin/users/{user_id}/reissue-login` | admin keys | A new login link for an account (admin) |
-| [`admin_rename_invite_link`](#admin_rename_invite_link) | `POST /api/admin/invite-links/{link_id}/rename` | admin keys | Rename an invite link (admin) |
-| [`admin_rename_user`](#admin_rename_user) | `POST /api/admin/users/{user_id}/rename` | admin keys | Rename someone (admin) |
-| [`admin_reset_two_factor`](#admin_reset_two_factor) | `POST /api/admin/users/{user_id}/reset-two-factor` | admin keys | Turn off an account's two-factor (admin) |
-| [`admin_restore_invite_link`](#admin_restore_invite_link) | `POST /api/admin/invite-links/{link_id}/restore` | admin keys | Undo deleting an invite link (admin) |
-| [`admin_revoke_access`](#admin_revoke_access) | `POST /api/admin/users/{user_id}/revoke-access` | admin keys | Revoke a user's access (admin) |
-| [`admin_revoke_invite_link`](#admin_revoke_invite_link) | `POST /api/admin/invite-links/{link_id}/revoke` | admin keys | Switch off an invite link (admin) |
-| [`admin_revoke_user_session`](#admin_revoke_user_session) | `POST /api/admin/users/{user_id}/sessions/{session_id}/revoke` | admin keys | Sign out one of an account's devices (admin) |
-| [`admin_set_invite_link_limits`](#admin_set_invite_link_limits) | `POST /api/admin/invite-links/{link_id}/limits` | admin keys | Change an invite link's places and expiry (admin) |
-| [`admin_set_theme_defaults`](#admin_set_theme_defaults) | `POST /api/admin/theme-defaults` | admin keys | Replace the default themes (admin) |
-| [`admin_set_user_disabled`](#admin_set_user_disabled) | `POST /api/admin/users/{user_id}/disabled` | admin keys | Disable or enable a user (admin) |
-| [`admin_set_user_role`](#admin_set_user_role) | `POST /api/admin/users/{user_id}/role` | admin keys | Change an account's role (admin) |
-| [`admin_switch_on_invite_link`](#admin_switch_on_invite_link) | `POST /api/admin/invite-links/{link_id}/switch-on` | admin keys | Switch an invite link back on (admin) |
-| [`cancel_my_login_link`](#cancel_my_login_link) | `POST /api/account/login-link/cancel` | any key | Stop your own login link working |
-| [`create_my_login_link`](#create_my_login_link) | `POST /api/account/login-link` | any key | A login link for yourself |
-| [`label_my_session`](#label_my_session) | `POST /api/account/sessions/{session_id}/label` | any key | Name one of your devices |
-| [`list_my_sessions`](#list_my_sessions) | `GET /api/account/sessions` | any key | Your signed-in devices |
-| [`list_team`](#list_team) | `GET /api/team` | any key | List team |
-| [`rename_account`](#rename_account) | `POST /api/account/rename` | any key | Rename your account |
-| [`revoke_my_other_sessions`](#revoke_my_other_sessions) | `POST /api/account/sessions/revoke-others` | any key | Sign out all your devices |
-| [`revoke_my_session`](#revoke_my_session) | `POST /api/account/sessions/{session_id}/revoke` | any key | Sign out one of your devices |
-| [`set_shortcuts`](#set_shortcuts) | `POST /api/account/shortcuts` | any key | Set your keyboard shortcuts |
-| [`set_theme`](#set_theme) | `POST /api/account/theme` | any key | Pick your theme |
-| [`set_themes`](#set_themes) | `POST /api/account/themes` | any key | Replace your own themes |
-| [`whoami`](#whoami) | `GET /api/me` | any key | Who am I |
-| [`list_batches`](#list_batches) | `GET /api/ais/batches` | any key | List batches |
-| [`list_folders`](#list_folders) | `GET /api/ais/folders` | any key | List folders |
-| [`get_batch`](#get_batch) | `GET /api/ais/batches/{batch_id}` | any key | Get a batch |
-| [`batch_status`](#batch_status) | `GET /api/ais/batches/{batch_id}/status` | any key | Batch image status |
-| [`batch_channels`](#batch_channels) | `GET /api/ais/batches/{batch_id}/channels` | any key | Batch .czi channels |
-| [`list_results`](#list_results) | `GET /api/ais/results` | any key | List results |
-| [`list_measurements`](#list_measurements) | `GET /api/ais/measurements` | any key | List recorded lines |
-| [`list_measure_types`](#list_measure_types) | `GET /api/ais/measure-types` | any key | List measurement types |
-| [`create_batch`](#create_batch) | `POST /api/ais/batches` | any key | Create an empty batch |
-| [`create_batch_from_files`](#create_batch_from_files) | `POST /api/ais/batches/upload` | any key | Create a batch from files |
-| [`add_files_to_batch`](#add_files_to_batch) | `POST /api/ais/batches/{batch_id}/upload` | any key | Add files to a batch |
-| [`get_channel_layouts`](#get_channel_layouts) | `GET /api/ais/batches/{batch_id}/layouts` | any key | List a batch's channel layouts |
-| [`set_channel_roles`](#set_channel_roles) | `POST /api/ais/batches/{batch_id}/layouts` | any key | Set channel roles |
-| [`fill_missing_areas`](#fill_missing_areas) | `POST /api/ais/batches/{batch_id}/fill-areas` | any key | Fill in missing AIS areas |
-| [`rename_batch`](#rename_batch) | `POST /api/ais/batches/{batch_id}/rename` | any key | Rename a batch |
-| [`archive_batch`](#archive_batch) | `POST /api/ais/batches/{batch_id}/archive` | any key | Archive or bring back a batch |
-| [`set_images_included`](#set_images_included) | `POST /api/ais/batches/{batch_id}/include` | any key | Include or leave out images |
-| [`set_image_done`](#set_image_done) | `POST /api/ais/batches/{batch_id}/done` | any key | Mark an image done |
-| [`assign_batch`](#assign_batch) | `POST /api/ais/batches/{batch_id}/assign` | admin keys | Assign a batch (admin) |
-| [`order_batches`](#order_batches) | `POST /api/ais/batches/order` | admin keys | Order batches (admin) |
-| [`move_batches`](#move_batches) | `POST /api/ais/batches/move` | admin keys | Move batches into a folder (admin) |
-| [`create_folder`](#create_folder) | `POST /api/ais/folders` | admin keys | Create a folder (admin) |
-| [`rename_folder`](#rename_folder) | `POST /api/ais/folders/{folder_id}/rename` | admin keys | Rename a folder (admin) |
-| [`move_folder`](#move_folder) | `POST /api/ais/folders/{folder_id}/move` | admin keys | Move a folder (admin) |
-| [`order_folders`](#order_folders) | `POST /api/ais/folders/order` | admin keys | Order folders (admin) |
-| [`get_treatments`](#get_treatments) | `GET /api/ais/batches/{batch_id}/treatments` | admin keys | Get treatments (admin) |
-| [`set_treatments`](#set_treatments) | `POST /api/ais/batches/{batch_id}/treatments` | admin keys | Set treatments (admin) |
-| [`get_translation`](#get_translation) | `GET /api/ais/batches/{batch_id}/translation.txt` | admin keys | Get __Translation.txt (admin) |
-| [`load_translation`](#load_translation) | `POST /api/ais/batches/{batch_id}/translation` | admin keys | Load a __Translation.txt (admin) |
-| [`rerandomize_add`](#rerandomize_add) | `POST /api/ais/batches/{batch_id}/adds/{add_id}/randomize` | admin keys | New random names for a folder (admin) |
-| [`get_backup`](#get_backup) | `GET /api/ais/batches/{batch_id}/backup` | admin keys | Back up a batch (admin) |
-| [`save_result`](#save_result) | `POST /api/ais/results` | any key | Save an AIS |
-| [`update_result`](#update_result) | `POST /api/ais/results/{result_id}/update` | any key | Change an AIS |
-| [`set_result_soma`](#set_result_soma) | `POST /api/ais/results/{result_id}/soma` | any key | Set an AIS's soma distance |
-| [`delete_result`](#delete_result) | `POST /api/ais/results/{result_id}/delete` | any key | Delete an AIS |
-| [`add_measurement`](#add_measurement) | `POST /api/ais/measurements` | any key | Record a line |
-| [`update_measurement`](#update_measurement) | `POST /api/ais/measurements/{measurement_id}/update` | any key | Change a recorded line |
-| [`delete_measurement`](#delete_measurement) | `POST /api/ais/measurements/{measurement_id}/delete` | any key | Delete a recorded line |
-| [`set_measure_types`](#set_measure_types) | `POST /api/ais/measure-types` | admin keys | Set measurement types (admin) |
-| [`reset_batch_auto`](#reset_batch_auto) | `POST /api/ais/batches/{batch_id}/reset` | admin keys | Delete a batch's auto AIS (admin) |
-| [`auto_defaults`](#auto_defaults) | `GET /api/ais/auto/defaults` | any key | Auto mode defaults |
-| [`start_auto_run`](#start_auto_run) | `POST /api/ais/batches/{batch_id}/auto` | any key | Start an auto run |
-| [`get_auto_run`](#get_auto_run) | `GET /api/ais/auto/{run_id}` | any key | Auto run status |
-| [`list_auto_runs`](#list_auto_runs) | `GET /api/ais/auto` | any key | List auto runs |
-| [`cancel_auto_run`](#cancel_auto_run) | `POST /api/ais/auto/{run_id}/cancel` | any key | Stop an auto run |
-| [`export_report`](#export_report) | `GET /api/ais/report` | any key | Export a report as JSON |
-| [`compare_batches`](#compare_batches) | `POST /api/ais/compare` | admin keys | Compare batches by treatment (admin) |
-| [`upload_instructions`](#upload_instructions) | `POST /api/ais/files` | any key | How to upload files |
-| [`files_stored`](#files_stored) | `POST /api/ais/files` | any key | Which files the server has |
-| [`get_image`](#get_image) | `GET /api/ais/files/{sha}/view.png` | any key | Look at an image |
-| [`trace_click`](#trace_click) | `POST /api/ais/trace` | any key | Trace an AIS from a click |
-| [`detect_image`](#detect_image) | `POST /api/ais/detect` | any key | Find AIS on one image |
-
-### admin_cancel_login_link
-
-Void an account's live login link without making a new one: a link that went somewhere it should not have. Devices it already signed in stay signed in; admin_revoke_access ends those too. Answers with removed: 0 or 1.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/cancel-login-link` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_create_invite_link
-
-One link for a group: each person who opens it joins as a new user, up to max_uses people, for days days. Answers with join_url (shown only now) and the link's details. Revoking or deleting this API key switches the link off.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/invite-links` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `days` | integer | yes | 1 to 365 |  |
-| `label` | string | yes | 1 to 80 characters |  |
-| `max_uses` | integer | yes | 1 to 1000 |  |
-
-### admin_create_user
-
-Make a new account and its first login link, to hand to the person. role is admin or user. Answers with user_id and the link. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `display_name` | string | yes | 1 to 80 characters |  |
-| `expires_in_minutes` | integer or null | no | 0 to 525600 | 0 never expires. Default auth.login_token_ttl_seconds for a link that works once, auth.multi_use_login_token_ttl_seconds otherwise. |
-| `max_uses` | integer or null | no | 0 to 1000 | Sign-ins the link allows: 1-1000, or 0 for unlimited. Default 1. |
-| `role` | string | yes | one of `admin`, `user` |  |
-
-### admin_delete_invite_link
-
-Take an invite link off the list and stop it working. The accounts it made stay. admin_restore_invite_link undoes it for a few minutes.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/invite-links/{link_id}/delete` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
-
-### admin_delete_user
-
-Remove an account for good, with its sessions, login link and API keys. Cannot be undone: admin_set_user_disabled is the reversible version. Only the owner deletes an admin; nobody deletes the owner or themselves.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/delete` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_get_theme_defaults
-
-The theme list everyone without their own list sees. themes is null while the built-in ones apply.
-
-|  |  |
-|---|---|
-| Route | `GET /api/admin/theme-defaults` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-
-### admin_list_invite_links
-
-Group invite links, a page at a time: label, places used and left, expiry, and whether each still works. The links themselves are never shown again after creation. next is the offset of the following page, or null on the last one.
-
-|  |  |
-|---|---|
-| Route | `GET /api/admin/invite-links` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `dir` | string | no | one of `asc`, `desc` | Default asc. |
-| `limit` | integer | no | 1 to 1000; default `200` | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-| `q` | string | no |  | Keep links whose label or maker contains this, in any case. |
-| `sort` | string | no | one of `label`, `used`, `expires_at` | Field to sort the whole list by. Rows without it go last. |
-
-### admin_list_user_sessions
-
-Where an account is signed in: every session, with when it started and was last seen. Addresses are shown to the owner only, and only the owner sees the owner's.
-
-|  |  |
-|---|---|
-| Route | `GET /api/admin/users/{user_id}/sessions` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `limit` | integer | no | 1 to 1000; default `200` | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_list_users
-
-Accounts, a page at a time, including disabled ones, with each one's role and which is the owner. next is the offset of the following page, or null on the last one.
-
-|  |  |
-|---|---|
-| Route | `GET /api/admin/users` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `dir` | string | no | one of `asc`, `desc` | Default asc. |
-| `limit` | integer | no | 1 to 1000; default `200` | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-| `q` | string | no |  | Keep accounts whose name or username contains this, in any case. |
-| `sort` | string | no | one of `display_name`, `role`, `disabled`, `created_at` | Field to sort the whole list by. Rows without it go last. |
-
-### admin_reissue_login
-
-For someone who lost their device or their link: a fresh login link for their account. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/reissue-login` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expires_in_minutes` | integer or null | no | 0 to 525600 | 0 never expires. Default auth.login_token_ttl_seconds for a link that works once, auth.multi_use_login_token_ttl_seconds otherwise. |
-| `max_uses` | integer or null | no | 0 to 1000 | Sign-ins the link allows: 1-1000, or 0 for unlimited. Default 1. |
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_rename_invite_link
-
-Change the label people see on an invite link's join page (1-80 characters). expect, when given, is the label you think it has now.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/invite-links/{link_id}/rename` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expect` | string or null | no |  | The label you think it has. Answers 409 if it has another. |
-| `label` | string | yes | 1 to 80 characters | 1-80 characters. |
-| `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
-
-### admin_rename_user
-
-Change another account's display name (1-80 characters). Only the owner renames an admin. expect, when given, is the name you think it has now; if it changed meanwhile the rename is refused with the current name.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/rename` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `display_name` | string | yes | 1 to 80 characters | 1-80 characters. |
-| `expect` | string or null | no |  | The name you think they have. Answers 409 if it is another. |
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_reset_two_factor
-
-For someone who lost both their phone and their recovery codes: switches their two-factor sign-in off so a login link lets them in again. Only the owner resets an admin's; the owner's is reset from a shell.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/reset-two-factor` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_restore_invite_link
-
-Bring back an invite link deleted in the last few minutes, working as before. The link then counts as this key's: revoking the key switches it off.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/invite-links/{link_id}/restore` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
-
-### admin_revoke_access
-
-For an account that may be compromised: ends every session and voids its live login link and every API key it holds, at once. The account stays enabled; admin_reissue_login lets its owner back in. The owner and your own account cannot be revoked.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/revoke-access` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_revoke_invite_link
-
-Stop an invite link from letting anyone else join or sign in through it. Accounts it already made keep working. Cannot be switched back on.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/invite-links/{link_id}/revoke` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
-
-### admin_revoke_user_session
-
-End one of an account's sessions, rather than all of them with admin_revoke_access.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/sessions/{session_id}/revoke` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `session_id` | string | yes |  | The device's id, from GET /api/account/sessions or GET /api/admin/users/{user_id}/sessions (list_my_sessions or admin_list_user_sessions over MCP). |
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_set_invite_link_limits
-
-Set how many people the link may take in (never fewer than have joined) and, when days is given, a new expiry counted from now. The link then counts as this key's: revoking the key switches it off.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/invite-links/{link_id}/limits` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `days` | integer or null | no | 1 to 365 | Counted from now. Leave out to keep the expiry. |
-| `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
-| `max_uses` | integer | yes | 1 to 1000 | Not fewer than have joined. |
-
-### admin_set_theme_defaults
-
-Replace the theme list everyone without their own list sees, 1 to 40 themes in the Theme schema of the API reference. null puts the built-in themes back.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/theme-defaults` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `themes` | array of object or null | no |  | 1 to 40 themes. null goes back to the built-in ones. |
-| `themes[].accent` | string | yes |  | The main color: what you can press. |
-| `themes[].background` | string | no |  | The page. Left out: the mode's own. |
-| `themes[].button` | object or null | no |  | How the theme's buttons look. A choice left out is the default (rounded, normal, raised, normal). |
-| `themes[].button.case` | string | no | one of `normal`, `upper` |  |
-| `themes[].button.depth` | string | no | one of `flat`, `raised`, `glossy` |  |
-| `themes[].button.shape` | string | no | one of `square`, `soft`, `rounded`, `pill` |  |
-| `themes[].button.weight` | string | no | one of `normal`, `medium`, `bold` |  |
-| `themes[].dark` | object or null | no |  | A light theme's colors for dark mode, kept while it is light. Switching the theme to dark swaps them in. A light theme's light (or a dark theme's dark) is dropped. |
-| `themes[].dark.accent` | string | yes |  | The main color: what you can press. |
-| `themes[].dark.background` | string | no |  | The page. Left out: the mode's own. |
-| `themes[].dark.overrides` | map of string | no |  | Worked-out colors replaced by name: text, accent, accentFg, second, secondFg, secondText, link, navLink, background, surface, nested, chrome, info, infoBorder, border, and for each button variant V (Secondary, Success, Danger, Warning, Info, Light, Dark) btnV, btnVFg and btnVText. Leaving one out puts the readable color back. |
-| `themes[].dark.second` | string | yes |  | Says where you are: active nav item, headings, info. |
-| `themes[].dark.surface` | string | no |  | Cards. Left out: the mode's own. |
-| `themes[].id` | string | yes |  | Lower-case letters, digits, - and _, up to 32. |
-| `themes[].light` | object or null | no |  | A dark theme's colors for light mode, kept while it is dark. Switching the theme to light swaps them in. |
-| `themes[].light.accent` | string | yes |  | The main color: what you can press. |
-| `themes[].light.background` | string | no |  | The page. Left out: the mode's own. |
-| `themes[].light.overrides` | map of string | no |  | Worked-out colors replaced by name: text, accent, accentFg, second, secondFg, secondText, link, navLink, background, surface, nested, chrome, info, infoBorder, border, and for each button variant V (Secondary, Success, Danger, Warning, Info, Light, Dark) btnV, btnVFg and btnVText. Leaving one out puts the readable color back. |
-| `themes[].light.second` | string | yes |  | Says where you are: active nav item, headings, info. |
-| `themes[].light.surface` | string | no |  | Cards. Left out: the mode's own. |
-| `themes[].mode` | string | yes | one of `light`, `dark` |  |
-| `themes[].name` | string | yes |  | 1 to 60 characters. |
-| `themes[].overrides` | map of string | no |  | Worked-out colors replaced by name: text, accent, accentFg, second, secondFg, secondText, link, navLink, background, surface, nested, chrome, info, infoBorder, border, and for each button variant V (Secondary, Success, Danger, Warning, Info, Light, Dark) btnV, btnVFg and btnVText. Leaving one out puts the readable color back. |
-| `themes[].second` | string | yes |  | Says where you are: active nav item, headings, info. |
-| `themes[].surface` | string | no |  | Cards. Left out: the mode's own. |
-
-### admin_set_user_disabled
-
-Switch an account off (disabled: true) or back on (false). Disabling signs it out everywhere and voids its live login link; its API keys stop working while it is off. Reversible. The owner and your own account cannot be disabled.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/disabled` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `disabled` | boolean | yes |  |  |
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_set_user_role
-
-Make an account an admin or an ordinary user. Only the owner takes an admin's rights away; the owner is always an admin, and nobody changes their own role. Becoming an admin ends the account's sessions and live login link.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/users/{user_id}/role` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `role` | string | yes | one of `admin`, `user` |  |
-| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
-
-### admin_switch_on_invite_link
-
-Undo admin_revoke_invite_link: anyone still holding the link can use it again. The link then counts as this key's: revoking the key switches it off.
-
-|  |  |
-|---|---|
-| Route | `POST /api/admin/invite-links/{link_id}/switch-on` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
-
-### cancel_my_login_link
-
-Void your account's live login link without making a new one. Devices it already signed in stay signed in. Answers with removed: 0 or 1.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/login-link/cancel` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-
-### create_my_login_link
-
-A link that signs your own account in on a browser or another device. Only a key with your account's full role may ask: one scoped down to user on an admin account is refused. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/login-link` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expires_in_minutes` | integer or null | no | 0 to 525600 | 0 never expires. Default auth.login_token_ttl_seconds for a link that works once, auth.multi_use_login_token_ttl_seconds otherwise. |
-| `max_uses` | integer or null | no | 0 to 1000 | Sign-ins the link allows: 1-1000, or 0 for unlimited. Default 1. |
-
-### label_my_session
-
-Give one of your devices a name (at most 80 characters; empty clears it). expect, when given, is the name you think it has now.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/sessions/{session_id}/label` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expect` | string or null | no |  | The name you think it has. Answers 409 if it has another. |
-| `label` | string | yes | at most 80 characters | At most 80 characters. |
-| `session_id` | string | yes |  | The device's id, from GET /api/account/sessions or GET /api/admin/users/{user_id}/sessions (list_my_sessions or admin_list_user_sessions over MCP). |
-
-### list_my_sessions
-
-Where your account is signed in, a page at a time: id, when it started and was last seen, the browser, and the name you gave it. Through an API key no device is current. next is the offset of the following page, or null on the last one.
-
-|  |  |
-|---|---|
-| Route | `GET /api/account/sessions` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `limit` | integer | no | 1 to 1000; default `200` | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-
-### list_team
-
-People with an active account, a page at a time: id and display name. Use the id wherever another tool asks for a user. next is the offset of the following page, or null on the last one.
-
-|  |  |
-|---|---|
-| Route | `GET /api/team` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `limit` | integer | no | 1 to 1000; default `200` | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-
-### rename_account
-
-Change your own display name (1-80 characters). expect, when given, is the name you think it has now; if someone changed it meanwhile the rename is refused with the current name, so nothing is overwritten unseen.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/rename` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `display_name` | string | yes | 1 to 80 characters |  |
-| `expect` | string or null | no |  |  |
-
-### revoke_my_other_sessions
-
-End every session your account has: through an API key there is no current device to keep, so every browser signs in again. API keys keep working. Answers with how many were removed.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/sessions/revoke-others` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-
-### revoke_my_session
-
-End one of your signed-in sessions; that browser has to sign in again.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/sessions/{session_id}/revoke` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `session_id` | string | yes |  | The device's id, from GET /api/account/sessions or GET /api/admin/users/{user_id}/sessions (list_my_sessions or admin_list_user_sessions over MCP). |
-
-### set_shortcuts
-
-Replace your rebound keyboard shortcuts: action id to its list of keys, such as "undo": ["Mod+Z"] (Mod is Cmd on a Mac, Ctrl elsewhere). Send the whole map; an empty list switches an action's keys off, and {} puts every key back to its default. whoami shows the current map.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/shortcuts` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `shortcuts` | map of array of string | yes |  | Action id to the keys bound to it. Replaces the whole map; {} puts every key back to its default. Action ids the screens do not know are ignored. |
-
-### set_theme
-
-Switch to another theme from your list (or the defaults), by its id.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/theme` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `theme_id` | string | yes |  | A theme's id. Empty for the first in the list. |
-
-### set_themes
-
-Replace your whole list of color themes (1 to 40) and pick the one you use. themes: null goes back to following the app's defaults. A theme is the Theme schema in the API reference (config/openapi.json): id, name, mode light|dark, accent, second, and optional colors as #rrggbb. whoami shows the current list.
-
-|  |  |
-|---|---|
-| Route | `POST /api/account/themes` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `theme_id` | string | no |  | The theme you use. |
-| `themes` | array of object or null | no |  | Your whole list, 1 to 40 themes. null goes back to following the app's defaults. |
-| `themes[].accent` | string | yes |  | The main color: what you can press. |
-| `themes[].background` | string | no |  | The page. Left out: the mode's own. |
-| `themes[].button` | object or null | no |  | How the theme's buttons look. A choice left out is the default (rounded, normal, raised, normal). |
-| `themes[].button.case` | string | no | one of `normal`, `upper` |  |
-| `themes[].button.depth` | string | no | one of `flat`, `raised`, `glossy` |  |
-| `themes[].button.shape` | string | no | one of `square`, `soft`, `rounded`, `pill` |  |
-| `themes[].button.weight` | string | no | one of `normal`, `medium`, `bold` |  |
-| `themes[].dark` | object or null | no |  | A light theme's colors for dark mode, kept while it is light. Switching the theme to dark swaps them in. A light theme's light (or a dark theme's dark) is dropped. |
-| `themes[].dark.accent` | string | yes |  | The main color: what you can press. |
-| `themes[].dark.background` | string | no |  | The page. Left out: the mode's own. |
-| `themes[].dark.overrides` | map of string | no |  | Worked-out colors replaced by name: text, accent, accentFg, second, secondFg, secondText, link, navLink, background, surface, nested, chrome, info, infoBorder, border, and for each button variant V (Secondary, Success, Danger, Warning, Info, Light, Dark) btnV, btnVFg and btnVText. Leaving one out puts the readable color back. |
-| `themes[].dark.second` | string | yes |  | Says where you are: active nav item, headings, info. |
-| `themes[].dark.surface` | string | no |  | Cards. Left out: the mode's own. |
-| `themes[].id` | string | yes |  | Lower-case letters, digits, - and _, up to 32. |
-| `themes[].light` | object or null | no |  | A dark theme's colors for light mode, kept while it is dark. Switching the theme to light swaps them in. |
-| `themes[].light.accent` | string | yes |  | The main color: what you can press. |
-| `themes[].light.background` | string | no |  | The page. Left out: the mode's own. |
-| `themes[].light.overrides` | map of string | no |  | Worked-out colors replaced by name: text, accent, accentFg, second, secondFg, secondText, link, navLink, background, surface, nested, chrome, info, infoBorder, border, and for each button variant V (Secondary, Success, Danger, Warning, Info, Light, Dark) btnV, btnVFg and btnVText. Leaving one out puts the readable color back. |
-| `themes[].light.second` | string | yes |  | Says where you are: active nav item, headings, info. |
-| `themes[].light.surface` | string | no |  | Cards. Left out: the mode's own. |
-| `themes[].mode` | string | yes | one of `light`, `dark` |  |
-| `themes[].name` | string | yes |  | 1 to 60 characters. |
-| `themes[].overrides` | map of string | no |  | Worked-out colors replaced by name: text, accent, accentFg, second, secondFg, secondText, link, navLink, background, surface, nested, chrome, info, infoBorder, border, and for each button variant V (Secondary, Success, Danger, Warning, Info, Light, Dark) btnV, btnVFg and btnVText. Leaving one out puts the readable color back. |
-| `themes[].second` | string | yes |  | Says where you are: active nav item, headings, info. |
-| `themes[].surface` | string | no |  | Cards. Left out: the mode's own. |
-
-### whoami
-
-The account this API key belongs to, the role it acts with (role -- never higher than the key's own scope), and the account's own role.
-
-|  |  |
-|---|---|
-| Route | `GET /api/me` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-
-### list_batches
-
-Batches in the team's order, a page at a time, with progress (images, included, completed, ais, auto, stored, assignees, live activity) and the folders. Archived ones only with archived: true. next is the offset of the following page, or null.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `archived` | boolean | no |  |  |
-| `folder_id` | integer | no | at least 1 | The folder's id, from list_folders. |
-| `limit` | integer | no | 1 to 1000 | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-| `q` | string | no |  | Only names containing this. |
-
-### list_folders
-
-The batch folders, each with its parent and order.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/folders` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-
-### get_batch
-
-One batch whole: its images (key, cell, dir, files per role with sha and whether the server has them stored), adds, done marks (skipped), excluded images, assignment. Admins also see original names.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches/{batch_id}` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### batch_status
-
-Per image, a page at a time: files and how many are stored, accepted AIS (and how many by auto mode), done, duplicate of, assignee, included.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches/{batch_id}/status` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `limit` | integer | no | 1 to 1000 | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-
-### batch_channels
-
-The channels of the batch's included .czi files, by name, with how many files have each.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches/{batch_id}/channels` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### list_results
-
-Accepted AIS, a page at a time: one batch's, or every batch's without batch_id; image narrows it to one image. Each row's numbers as the export has them (length_um, ...), its rev for update_result, created_by. pixels only with include_pixels: true.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/results` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | no | at least 1 | The batch's id, from list_batches. |
-| `image` | string | no |  | The image's key in the batch (batch_status or get_batch: key). |
-| `include_pixels` | boolean | no |  |  |
-| `limit` | integer | no | 1 to 1000 | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-
-### list_measurements
-
-Lines recorded with the Measure tool, a page at a time: one batch's, or every batch's; image narrows it.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/measurements` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | no | at least 1 | The batch's id, from list_batches. |
-| `image` | string | no |  | The image's key in the batch (batch_status or get_batch: key). |
-| `limit` | integer | no | 1 to 1000 | Rows to return. Default 200. |
-| `offset` | integer | no | at least 0 | Rows to skip: the next value of the previous page. |
-
-### list_measure_types
-
-The team's types a recorded line can have.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/measure-types` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-
-### create_batch
-
-A new batch with no images yet, in that folder or at the top. Add files with add_files_to_batch.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `folder_id` | integer | no | at least 1 | The folder's id, from list_folders. |
-| `name` | string | yes |  |  |
-
-### create_batch_from_files
-
-A new batch from files you hashed (name, rel, sha, size each), grouped into images as the browser does (<cell>.tif raw, '<cell>.tif - Processed method 2.5.tif' processed, .czi, *_zNNN.tif with stack). Duplicates start left out. Answers with the files the server still needs and how to upload them (POST each file's bytes to /api/ais/files with your API key).
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/upload` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `channels` | array of object | no |  | Channel roles per layout: [{layout: {kind, names}, roles: [{role: ais \| soma \| other, label}]}], one role per channel, exactly one ais, at most one soma, a label for each other. Images whose file layout matches get them; left out, the AIS is guessed (a .czi's Alexa Fluor 488, a TIFF's first plane). |
-| `channels[].layout` | object | no |  |  |
-| `channels[].roles` | array of any | no |  |  |
-| `czi_stack` | object | no |  | Z-stack .czi files (files with zstack) become one image each: {apotome: sectioned (default) \| widefield}, how an ApoTome stack's grid phases are made into slices. Their AIS channel is guessed (Alexa Fluor 488) unless channels says. |
-| `czi_stack.apotome` | string | no | one of `sectioned`, `widefield` |  |
-| `files` | array of object | yes |  | The files, hashed on your side: name and rel (path inside the picked folder) as they are, sha256 of the bytes, size in bytes. |
-| `files[].layout` | object | no |  | Its channels, for channels: {kind: czi \| tiff, names: [...]} (a .czi's channel names; a TIFF's planes as Red/Green/Blue or Channel N). |
-| `files[].modified` | number | no |  |  |
-| `files[].name` | string | yes |  |  |
-| `files[].rel` | string | yes |  |  |
-| `files[].sha` | string | yes |  | sha-256 of the file, lower-case hex. |
-| `files[].size` | integer | yes |  |  |
-| `files[].zstack` | object | no |  | A .czi with more than one Z plane (a Z-stack): {slices, phases (ApoTome grid phases, 1 without), z_step_um, pixel_um} from its metadata (Scaling X and Z, in microns). Needs layout. |
-| `name` | string | yes |  |  |
-| `randomize` | boolean | no |  | Blind the names (default true): images get random n-n-n names, the originals kept for admins. |
-| `stack` | object | no |  | Z-stack TIFF slices (name_zNNN.tif) become one image each stack: {plane: 0 red \| 1 green \| 2 blue \| 3, z_step_um, pixel_um}. |
-| `stack.pixel_um` | number | no |  |  |
-| `stack.plane` | integer | no |  |  |
-| `stack.z_step_um` | number | no |  |  |
-| `translations` | array of object | no |  | __Translation.txt files that came with them: [{dir, text}]. |
-| `translations[].dir` | string | no |  |  |
-| `translations[].text` | string | no |  |  |
-
-### add_files_to_batch
-
-More files into an existing batch, as create_batch_from_files. add_name names this add (a folder name).
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/upload` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `add_name` | string | no |  |  |
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `channels` | array of object | no |  | Channel roles per layout: [{layout: {kind, names}, roles: [{role: ais \| soma \| other, label}]}], one role per channel, exactly one ais, at most one soma, a label for each other. Images whose file layout matches get them; left out, the AIS is guessed (a .czi's Alexa Fluor 488, a TIFF's first plane). |
-| `channels[].layout` | object | no |  |  |
-| `channels[].roles` | array of any | no |  |  |
-| `czi_stack` | object | no |  | Z-stack .czi files (files with zstack) become one image each: {apotome: sectioned (default) \| widefield}, how an ApoTome stack's grid phases are made into slices. Their AIS channel is guessed (Alexa Fluor 488) unless channels says. |
-| `czi_stack.apotome` | string | no | one of `sectioned`, `widefield` |  |
-| `files` | array of object | yes |  | The files, hashed on your side: name and rel (path inside the picked folder) as they are, sha256 of the bytes, size in bytes. |
-| `files[].layout` | object | no |  | Its channels, for channels: {kind: czi \| tiff, names: [...]} (a .czi's channel names; a TIFF's planes as Red/Green/Blue or Channel N). |
-| `files[].modified` | number | no |  |  |
-| `files[].name` | string | yes |  |  |
-| `files[].rel` | string | yes |  |  |
-| `files[].sha` | string | yes |  | sha-256 of the file, lower-case hex. |
-| `files[].size` | integer | yes |  |  |
-| `files[].zstack` | object | no |  | A .czi with more than one Z plane (a Z-stack): {slices, phases (ApoTome grid phases, 1 without), z_step_um, pixel_um} from its metadata (Scaling X and Z, in microns). Needs layout. |
-| `randomize` | boolean | no |  | Blind the names (default true): images get random n-n-n names, the originals kept for admins. |
-| `stack` | object | no |  | Z-stack TIFF slices (name_zNNN.tif) become one image each stack: {plane: 0 red \| 1 green \| 2 blue \| 3, z_step_um, pixel_um}. |
-| `stack.pixel_um` | number | no |  |  |
-| `stack.plane` | integer | no |  |  |
-| `stack.z_step_um` | number | no |  |  |
-| `translations` | array of object | no |  | __Translation.txt files that came with them: [{dir, text}]. |
-| `translations[].dir` | string | no |  |  |
-| `translations[].text` | string | no |  |  |
-
-### get_channel_layouts
-
-The channel layouts of a batch's images (or one add's): each with its channel names, how many images, the roles in use and how many already have results.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches/{batch_id}/layouts` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `add` | integer | no |  |  |
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### set_channel_roles
-
-Which channel is the AIS, soma/dendrite or other, for a batch's (or one add's) images with those layouts; stack: {z_step_um, pixel_um} also sets its Z-stacks' slice spacing and pixel size (the files don't record them); pixel_um sets the microns per pixel its other images are measured with (null: back to the 40x default). Images now traced from other channels or calibration are no longer done; their results stay (3D measures as measured), so look at them again.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/layouts` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `add` | integer | no |  |  |
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `channels` | array of object | yes |  | Channel roles per layout: [{layout: {kind, names}, roles: [{role: ais \| soma \| other, label}]}], one role per channel, exactly one ais, at most one soma, a label for each other. Images whose file layout matches get them; left out, the AIS is guessed (a .czi's Alexa Fluor 488, a TIFF's first plane). |
-| `channels[].layout` | object | no |  |  |
-| `channels[].roles` | array of any | no |  |  |
-| `pixel_um` | number or null | no |  |  |
-| `stack` | object | no |  |  |
-| `stack.pixel_um` | number | no |  |  |
-| `stack.z_step_um` | number | no |  |  |
-
-### fill_missing_areas
-
-For a batch's accepted AIS saved before area (and on Z-stacks volume) was measured: trace each again from its saved clicks and settings and, when it comes out on the same pixels, fill in area_blob_um2, area_width_um2 (and volume_voxel_um3, volume_tube_um3); nothing else changes. with_soma: only AIS whose soma distance has been measured. A few at a time: call again with after until remaining is 0.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/fill-areas` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `after` | integer | no |  |  |
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `limit` | integer | no |  |  |
-| `with_soma` | boolean | no |  |  |
-
-### rename_batch
-
-Its accepted AIS carry the new name too. Whoever opened it, or an admin.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/rename` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `name` | string | yes |  |  |
-
-### archive_batch
-
-archived: true hides it from the list (its results stay); false brings it back.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/archive` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `archived` | boolean | yes |  |  |
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### set_images_included
-
-Include these images (included: true) or leave them out for the whole team. Left-out images are skipped by auto runs and the report.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/include` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `included` | boolean | yes |  |  |
-| `keys` | array of string | yes |  |  |
-
-### set_image_done
-
-Mark (done: true) or unmark an image done by hand: for images with no AIS worth accepting.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/done` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `done` | boolean | yes |  |  |
-| `image` | string | yes |  | The image's key in the batch (batch_status or get_batch: key). |
-
-### assign_batch
-
-Split the batch's images among people: shares [{user_id, percent}] (ids from list_team). An empty list clears it.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/assign` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `shares` | array of object | yes |  |  |
-
-### order_batches
-
-The team's priority order: batch ids, first on top.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/order` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `ids` | array of integer | yes |  |  |
-
-### move_batches
-
-Those batches into that folder; folder_id null for the top.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/move` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `folder_id` | integer or null | yes |  | The parent folder's id, or null for the top. |
-| `ids` | array of integer | yes |  |  |
-
-### create_folder
-
-A new folder, first in its parent (null: the top).
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/folders` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `name` | string | yes |  |  |
-| `parent_id` | integer or null | no |  | The parent folder's id, or null for the top. |
-
-### rename_folder
-
-
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/folders/{folder_id}/rename` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `folder_id` | integer | yes | at least 1 | The folder's id, from list_folders. |
-| `name` | string | yes |  |  |
-
-### move_folder
-
-Into another folder; parent_id null for the top.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/folders/{folder_id}/move` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `folder_id` | integer | yes | at least 1 | The folder's id, from list_folders. |
-| `parent_id` | integer or null | yes |  | The parent folder's id, or null for the top. |
-
-### order_folders
-
-The order of one folder's folders (parent_id null: the top).
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/folders/order` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `ids` | array of integer | yes |  |  |
-| `parent_id` | integer or null | yes |  | The parent folder's id, or null for the top. |
-
-### get_treatments
-
-Each image's original name, saved treatment and the guessed one.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches/{batch_id}/treatments` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### set_treatments
-
-treatments: {image key: treatment name}; "" takes one off.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/treatments` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `treatments` | object | yes |  |  |
-
-### get_translation
-
-The batch's original/random name per file, as text.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches/{batch_id}/translation.txt` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### load_translation
-
-For a batch blinded somewhere else: the original names of the files it names.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/translation` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `text` | string | yes |  |  |
-
-### rerandomize_add
-
-New random names for one add of the batch (add_id from get_batch adds, or "earlier"); its results, done marks, exclusions and assignment move with them.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/adds/{add_id}/randomize` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `add_id` | string | yes |  |  |
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### get_backup
-
-The batch as data, with its results and recorded lines and the people in it: what a restorable backup's manifest holds.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/batches/{batch_id}/backup` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### save_result
-
-Accept an AIS on an image: row as trace_click or detect_image gives it (or your own numbers). Give a client_id so a retry never saves it twice.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/results` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `client_id` | string | no |  | Your own id for this create (8-64 letters, digits, -). Sent again, it finds the first one instead of adding a second. |
-| `image` | string | yes |  | The image's key in the batch (batch_status or get_batch: key). |
-| `row` | object | yes |  | The row as save_result takes it: the 'row' a trace_click or detect_image candidate gives, or your own numbers (app/models/ais.py RESULT_NUMBERS). |
-
-### update_result
-
-An accepted AIS traced again: it keeps its number and origin. Whoever accepted it, the image's assignee, or an admin.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/results/{result_id}/update` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expect` | integer | no | at least 0 | The rev you last saw (optional). If someone changed it since, the call is refused with the current one. |
-| `result_id` | integer | yes | at least 1 | The result's id, from list_results. |
-| `row` | object | yes |  | The row as save_result takes it: the 'row' a trace_click or detect_image candidate gives, or your own numbers (app/models/ais.py RESULT_NUMBERS). |
-
-### set_result_soma
-
-soma: {soma_um, soma_px, soma_ais_x, soma_ais_y, soma_x, soma_y}, plus on a Z-stack soma_xy_um and soma_dz_um (soma_um is then the 3D distance), or null to clear it. The trace stays as it is.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/results/{result_id}/soma` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expect` | integer | no | at least 0 | The rev you last saw (optional). If someone changed it since, the call is refused with the current one. |
-| `result_id` | integer | yes | at least 1 | The result's id, from list_results. |
-| `soma` | object or null | yes |  |  |
-
-### delete_result
-
-One accepted AIS gone; the image's others renumbered. Whoever accepted it, the image's assignee, or an admin. Cannot be undone.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/results/{result_id}/delete` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expect` | integer | no | at least 0 | The rev you last saw (optional). If someone changed it since, the call is refused with the current one. |
-| `result_id` | integer | yes | at least 1 | The result's id, from list_results. |
-
-### add_measurement
-
-A line measured on an image (the Measure tool's Record).
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/measurements` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `client_id` | string | no |  | Your own id for this create (8-64 letters, digits, -). Sent again, it finds the first one instead of adding a second. |
-| `image` | string | yes |  | The image's key in the batch (batch_status or get_batch: key). |
-| `measurement` | object | yes |  | {a_x, a_y, b_x, b_y, length_px, length_um, pixconv, label?, type?}: a line's ends in MATLAB axes and its length. |
-
-### update_measurement
-
-Its new ends, length, label and type.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/measurements/{measurement_id}/update` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expect` | integer | no | at least 0 | The rev you last saw (optional). If someone changed it since, the call is refused with the current one. |
-| `measurement` | object | yes |  | {a_x, a_y, b_x, b_y, length_px, length_um, pixconv, label?, type?}: a line's ends in MATLAB axes and its length. |
-| `measurement_id` | integer | yes | at least 1 | The recorded line's id, from list_measurements. |
-
-### delete_measurement
-
-Cannot be undone.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/measurements/{measurement_id}/delete` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `expect` | integer | no | at least 0 | The rev you last saw (optional). If someone changed it since, the call is refused with the current one. |
-| `measurement_id` | integer | yes | at least 1 | The recorded line's id, from list_measurements. |
-
-### set_measure_types
-
-The team's new list of types: names.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/measure-types` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `types` | array of string | yes |  |  |
-
-### reset_batch_auto
-
-Deletes every AIS auto mode saved on the batch (the rest renumbered) and the done marks of the images they were on, to run auto again. What went is kept in the Batches screen's Trash for 30 days, where a person can put it back.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/reset` |
-| Read only | no |
-| Destructive | yes |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-
-### auto_defaults
-
-What an auto run or detect_image uses unless told otherwise, and what may be set: general (methods, filters), settings (the method's), threshold, engines, z_methods.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/auto/defaults` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-
-### start_auto_run
-
-Auto mode over a whole batch, run by the server: every included image (less the complete ones unless skip_done: false), each AIS the filters keep saved straight to the batch, as the browser's review 'all'. Answers at once; follow it with get_auto_run. mark_done also marks each image done. images: only these keys.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/batches/{batch_id}/auto` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `engine` | string or null | no | one of `fast`, `null` | fast: Settings' Method 'ais_auto.m (fast)', the same answer, sooner. |
-| `general` | object | no |  | Settings' general auto mode fields (see auto_defaults), e.g. {auto_method: 'fitted', fitted_min_length: 13}. Left out: the defaults. |
-| `images` | array of string | no |  |  |
-| `mark_done` | boolean | no |  |  |
-| `settings` | object | no |  | The method settings (see auto_defaults: settings), e.g. {pixconv: 0.161}. Left out: the defaults. |
-| `skip_done` | boolean | no |  |  |
-| `threshold` | number | no | 0 to 1 | Default 0.01 (0 = Otsu). |
-
-### get_auto_run
-
-How far a run has got: state (queued, running, finished, stopped, failed), done/total images, found, hidden, saved, errors per image.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/auto/{run_id}` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `run_id` | string | yes |  |  |
-
-### list_auto_runs
-
-The server's auto runs since it started, newest first; batch_id narrows them.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/auto` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | no | at least 1 | The batch's id, from list_batches. |
-
-### cancel_auto_run
-
-Stops after the image it is on; what it saved stays. Whoever started it, or an admin.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/auto/{run_id}/cancel` |
-| Read only | no |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `run_id` | string | yes |  |  |
-
-### export_report
-
-The Batches screen's report (report.xlsx) as JSON sheets -- summary, images, assignees, ais, measurements, measurement_types, and for admins original_names, by_treatment, statistics -- each {columns, rows}. batch: one id, several separated by commas, or all. Left-out images only with everything. unblind (admins): blinded images under their original names. sheets narrows it to those.
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/report` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch` | string | yes |  | A batch id, ids separated by commas, or all. |
-| `everything` | boolean | no |  |  |
-| `sheets` | string | no |  | Sheet names separated by commas. |
-| `unblind` | boolean | no |  |  |
-
-### compare_batches
-
-The comparison export (comparison.xlsx) as JSON: per measure the culture means, the treatment summary, every test with Holm-corrected p and stars, all values and original names, each sheet {columns, rows}; plus the raw groups, pooled, stats. Two batches or more (one culture each) for the tests between cultures. tests: anova, tukey, welch, dunnett, twoway, paired, unpaired, ks; units: culture means, individual values (every one when left out; nothing is averaged per image: each AIS of a treatment within a culture counts alike, and each culture is one n). design: the two-way ANOVA's factors, "drug x add-on" (default) or "treatment x culture". plots: true adds the box and cumulative plots as SVG.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/compare` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_ids` | array of integer | yes |  |  |
-| `design` | string | no | one of `drug x add-on`, `treatment x culture` |  |
-| `labels` | object | no |  | {measure id: name} for the plots' titles. |
-| `plots` | boolean | no |  |  |
-| `tests` | array of string | no |  |  |
-| `units` | array of string | no |  |  |
-
-### upload_instructions
-
-Image bytes do not go through MCP: POST each file's raw bytes to the url given, with your API key (Content-Type: application/octet-stream). With batch_id, also the files that batch still needs (sha, name, rel, image).
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/files` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | no | at least 1 | A batch: also list the files it still needs. |
-
-### files_stored
-
-For each sha-256, whether the server already holds that file (so it need not be uploaded again).
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/files` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `shas` | array of string | yes |  | sha-256s, lower-case hex. |
-
-### get_image
-
-An image as PNG: the processed view the Process screen traces on (view), a thumbnail (thumb), or a .czi's channels together (composite).
-
-|  |  |
-|---|---|
-| Route | `GET /api/ais/files/{sha}/view.png` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `kind` | string | no | one of `view`, `thumb`, `composite` | view (default): the processed image as the Process screen shows it; thumb: small; composite: a .czi's channels together. |
-| `sha` | string | yes |  | The file's sha (get_batch: images[].files[role].sha). |
-
-### trace_click
-
-What a click on the Process screen does: the AIS traced from that point, with the row to save (save_result) when it worked. Uses the auto_defaults settings unless given.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/trace` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `click` | array of number | yes |  | [x, y] in MATLAB axes: x = column, y = row, pixel centres at 1..n. |
-| `click2` | array of number | no |  | The second click after re-thresholding; default the first again. |
-| `engine` | string or null | no | one of `fast`, `null` | fast: Settings' Method 'ais_auto.m (fast)', the same answer, sooner. |
-| `image` | string | yes |  | The image's key in the batch (batch_status or get_batch: key). |
-| `settings` | object | no |  | The method settings (see auto_defaults: settings), e.g. {pixconv: 0.161}. Left out: the defaults. |
-| `threshold` | number | no | 0 to 1 | Default 0.01 (0 = Otsu). |
-| `z_method` | string | no |  | A Z-stack's method (default trace_lift). |
-
-### detect_image
-
-Auto mode on one image without saving: every candidate the filters keep (include_hidden: the rest too), each with passes and the row save_result takes -- so you can review and save them yourself. The image's saved AIS are left out of the search.
-
-|  |  |
-|---|---|
-| Route | `POST /api/ais/detect` |
-| Read only | yes |
-| Destructive | no |
-
-**Arguments**
-
-| Field | Type | Required | Limits | Description |
-|---|---|---|---|---|
-| `batch_id` | integer | yes | at least 1 | The batch's id, from list_batches. |
-| `engine` | string or null | no | one of `fast`, `null` | fast: Settings' Method 'ais_auto.m (fast)', the same answer, sooner. |
-| `general` | object | no |  | Settings' general auto mode fields (see auto_defaults), e.g. {auto_method: 'fitted', fitted_min_length: 13}. Left out: the defaults. |
-| `image` | string | yes |  | The image's key in the batch (batch_status or get_batch: key). |
-| `include_hidden` | boolean | no |  | Also list the candidates the filters leave out (default false). |
-| `settings` | object | no |  | The method settings (see auto_defaults: settings), e.g. {pixconv: 0.161}. Left out: the defaults. |
-| `threshold` | number | no | 0 to 1 | Default 0.01 (0 = Otsu). |
-| `verbose` | boolean | no |  | Keep each candidate's whole trace data (path, spline, profile, component). Default false. |
-
-### HTTP only
-
-Routes an API key may call that have no tool, and why.
-
-| Route | Why |
-|---|---|
-| `GET /api/about/report` | The About screen's copy of a document in the repository; nothing to act on. |
-| `GET /api/ais/files/{sha}/channel/{index}.png` | Viewer images for the Process screen; get_image gives an agent the processed view. |
-| `GET /api/ais/files/{sha}/channel/{index}.tif` | File bytes: MCP messages are JSON, and clients cap their size. Fetch it over HTTP with the same key. |
-| `GET /api/ais/files/{sha}/channels` | Viewer detail for the Process screen's channel picker; get_batch names each image's files. |
-| `GET /api/ais/files/{sha}/composite.png` | Reached through get_image with kind composite. |
-| `GET /api/ais/files/{sha}/file` | File bytes: MCP messages are JSON, and clients cap their size. Fetch it over HTTP with the same key. |
-| `GET /api/ais/files/{sha}/processed.tif` | File bytes: MCP messages are JSON, and clients cap their size. Fetch it over HTTP with the same key. |
-| `GET /api/ais/files/{sha}/slice/{index}.png` | Viewer images for the Process screen's z-stack slider; get_image gives an agent the processed view. |
-| `GET /api/ais/files/{sha}/somata` | Viewer overlay for the Process screen; detect_image and trace_click give an agent the results. |
-| `GET /api/ais/files/{sha}/thumb.png` | Reached through get_image with kind thumb. |
-| `GET /api/ais/local/status` | Whether Open path and MATLAB work on this machine: those routes need a browser session. |
-| `GET /api/ais/matlab/helper/download/{platform}` | The MATLAB helper program itself, a download for a person's computer. |
-| `GET /api/ais/matlab/helper/jobs/{job_id}/bundle` | Called by the MATLAB helper program, not by agents; the bundle is a zip. |
-| `GET /api/ais/matlab/helper/next` | Called by the MATLAB helper program, not by agents. |
-| `GET /api/ais/trash` | The trash only holds what the Batches screen deleted, which agents cannot do. |
-| `GET /api/mcp.json` | The MCP reference itself; tools/list gives the same list. |
-| `GET /api/openapi.json` | The API reference itself; GET /api/mcp.json is the MCP one. |
-| `POST /api/ais/batches/import` | A backup zip: MCP messages are JSON, and clients cap their size. Send it over HTTP with the same key. |
-| `POST /api/ais/batches/import/missing` | A backup zip: MCP messages are JSON, and clients cap their size. Send it over HTTP with the same key. |
-| `POST /api/ais/batches/{batch_id}/activity` | The Process screen reporting that someone is working on a batch, not an action. |
-| `POST /api/ais/batches/{batch_id}/delete` | Deleting a whole batch is kept out of agents' reach on purpose. |
-| `POST /api/ais/files/{sha}/pair` | A first guess for the Measure tool on the Process screen; it stores nothing. |
-| `POST /api/ais/folders/{folder_id}/delete` | Deleting a folder is kept out of agents' reach on purpose. |
-| `POST /api/ais/matlab/bundle` | A MATLAB run as a zip download for a person's computer. |
-| `POST /api/ais/matlab/helper/jobs/{job_id}/done` | Called by the MATLAB helper program, not by agents. |
-| `POST /api/ais/results/import` | A results file upload: MCP messages are JSON, and clients cap their size. Send it over HTTP with the same key. |
-| `POST /api/ais/trash/{trash_id}/purge` | Deleting for good is kept out of agents' reach on purpose. |
-| `POST /api/ais/trash/{trash_id}/restore` | The trash only holds what the Batches screen deleted, which agents cannot do. |
-| `POST /api/logout` | Ends a browser session; a key has none to end. |
-| `POST /api/logs/events` | The browser's own activity reports (track.js), not an action. |
-| `POST /mcp` | The MCP endpoint itself. |

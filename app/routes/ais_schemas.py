@@ -1,5 +1,5 @@
 """The request and reply types of the AIS routes (app/routes/ais.py and
-ais_matlab.py): config/openapi.json, config/api.md and the checks on every
+ais_matlab.py): config/api.json, config/api.md and the checks on every
 request come from these and the @route(...) beside each handler. Written once
 from the old ais_api.py, ais_results_api.py and ais_matlab_api.py docs."""
 from __future__ import annotations

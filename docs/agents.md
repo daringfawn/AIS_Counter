@@ -10,7 +10,7 @@ Two ways in, with the same API key and the same permissions:
 - **MCP** at `<server>/mcp`. The Account screen's MCP card gives the setup
   line for each client and makes the key.
 - **REST** at `<server>/api/...` with `Authorization: Bearer <key>`. No CSRF
-  token is needed with a key. `GET /api/openapi.json` lists every route.
+  token is needed with a key. `GET /api/api.json` lists every route.
 
 A key acts as its account, never above the key's own scope. A user key gets
 the blinded view, exactly as in the browser: no original names, no
