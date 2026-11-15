@@ -14,12 +14,17 @@ from __future__ import annotations
 import base64
 import binascii
 import math
+from dataclasses import replace
 from typing import Any, Callable
+
+import msgspec
+from msgspec import UNSET
 
 from starlette.requests import Request
 from starlette.responses import FileResponse, JSONResponse, Response
 
 from app.apidocs import ADMIN, KEY_ONLY, SESSION_ONLY, route
+from app.apidocs.route import declared_of
 from app.routes import ais_schemas as S
 from app.analysis import ais_auto as aa
 from app.analysis import detect as auto
@@ -33,7 +38,7 @@ from app.core.middleware import from_this_computer
 from app.core.security import actor_from, check_csrf
 from app.models import ais as batches
 from app.models import users
-from app.routes.helpers import bad_request, conflict, error, forbidden, get_config, get_store, not_found, parse_id, read_json, run
+from app.routes.helpers import Refused, bad_request, conflict, error, forbidden, get_config, get_store, not_found, parse_id, read_json, run
 
 # JSON bodies larger than the usual 1 MiB, each read whole: a batch's file
 # list, a backup's record, results to import, a base64 upload.
@@ -694,16 +699,25 @@ async def batch_create(request: Request, req: S.BatchCreateRequest) -> dict[str,
     return JSONResponse(await run(_batch_json, request, batch))
 
 
-async def _own_batch(request: Request) -> tuple[dict[str, Any] | None, Response | None]:
-    """The batch in the path, if whoever asks opened it or is an admin."""
-    batch_id = parse_id(request.path_params["batch_id"])
-    batch = await run(batches.get_batch, get_store(request), batch_id) if batch_id else None
+def _owned_batch(request: Request, batch_id: int) -> dict[str, Any]:
+    """The batch batch_id, if whoever asks opened it or is an admin; else
+    Refused. A plain function, for the routes that also have a bulk version
+    (their requests carry the id, since a bulk item has no path)."""
+    batch = batches.get_batch(get_store(request), batch_id) if batch_id > 0 else None
     if batch is None:
-        return None, not_found("no such batch")
+        raise Refused(404, "no such batch")
     actor = actor_from(request)
     if batch["created_by"] != actor.user.id and not actor.is_admin:
-        return None, forbidden("only whoever opened the batch, or an admin, can change it")
-    return batch, None
+        raise Refused(403, "only whoever opened the batch, or an admin, can change it")
+    return batch
+
+
+async def _own_batch(request: Request) -> tuple[dict[str, Any] | None, Response | None]:
+    """The batch in the path, if whoever asks opened it or is an admin."""
+    try:
+        return await run(_owned_batch, request, parse_id(request.path_params["batch_id"]) or 0), None
+    except Refused as refused:
+        return None, refused.response(request)
 
 
 MAX_FILL = 50
@@ -797,26 +811,20 @@ async def batch_rename(request: Request, req: S.BatchRenameRequest) -> dict[str,
 
 @route(
     "POST /api/ais/batches/{batch_id}/archive",
+    bulk=True,
     summary='Archive or unarchive a batch',
     tag='AIS',
     description='Body: {archived}: archive the batch (hidden, results kept) or bring it back.',
     reply_description='The batch record: its images (each file with stored, and for admins the original names), adds, assignment, skipped, created_by_name, assignee_names, adder_names and excluded.',
     errors=(400, 403, 404),
 )
-async def batch_archive(request: Request, req: S.BatchArchiveRequest) -> dict[str, Any]:
+def batch_archive(request: Request, req: S.BatchArchiveRequest) -> dict[str, Any]:
     """Body: {archived}: archive the batch (hidden, results kept) or bring it back."""
-    body, refused = await _body(request)
-    if refused:
-        return refused
-    if not isinstance(body.get("archived"), bool):
-        return bad_request("archived is required")
-    batch, refused = await _own_batch(request)
-    if refused:
-        return refused
-    archived = await run(batches.archive_batch, get_store(request), batch["id"], body["archived"])
+    batch = _owned_batch(request, req.batch_id)
+    archived = batches.archive_batch(get_store(request), batch["id"], req.archived)
     if archived is None:
-        return not_found("no such batch")
-    return JSONResponse(await run(_batch_json, request, archived))
+        raise Refused(404, "no such batch")
+    return _batch_json(request, archived)
 
 
 @route(
@@ -1729,78 +1737,73 @@ async def batch_import(request: Request, req: S.BatchImportRequest) -> dict[str,
 
 @route(
     "POST /api/ais/batches/{batch_id}/delete",
+    bulk=True,
     summary='Delete a batch',
     tag='AIS',
     mcp_http="Deleting a whole batch is kept out of agents' reach on purpose.",
     errors=(400, 403, 404),
 )
-async def batch_delete(request: Request, req: S.BatchDeleteRequest) -> S.OkTrashReply:
-    body, refused = await _body(request)
-    if refused:
-        return refused
+def batch_delete(request: Request, req: S.BatchDeleteRequest) -> S.OkTrashReply:
     store = get_store(request)
-    batch_id = parse_id(request.path_params["batch_id"])
-    batch = await run(batches.get_batch, store, batch_id) if batch_id else None
+    batch = batches.get_batch(store, req.batch_id)
     if batch is None:
-        return not_found("no such batch")
+        raise Refused(404, "no such batch")
     actor = actor_from(request)
     if batch["created_by"] != actor.user.id and not actor.is_admin:
-        return forbidden("only whoever opened the batch, or an admin, can delete it")
-    trash_id = await run(batches.delete_batch, store, batch_id, actor.user.id)
+        raise Refused(403, "only whoever opened the batch, or an admin, can delete it")
+    trash_id = batches.delete_batch(store, req.batch_id, actor.user.id)
     if trash_id is None:
-        return not_found("no such batch")
-    return JSONResponse({"ok": True, "trash_id": trash_id})
+        raise Refused(404, "no such batch")
+    return S.OkTrashReply(ok=True, trash_id=trash_id)
 
 
 @route(
     "POST /api/ais/batches/{batch_id}/done",
+    bulk=True,
     summary='Mark an image done or not done',
     tag='AIS',
     description='Body: {image, done}: mark an image done by hand (shared progress).',
     errors=(400, 403, 404),
 )
-async def batch_done(request: Request, req: S.BatchDoneRequest) -> S.BatchDoneReply:
+def batch_done(request: Request, req: S.BatchDoneRequest) -> S.BatchDoneReply:
     """Body: {image, done}: mark an image done by hand (shared progress)."""
-    body, refused = await _body(request)
-    if refused:
-        return refused
-    batch_id = parse_id(request.path_params["batch_id"])
-    if not batch_id or not isinstance(body.get("image"), str) or not isinstance(body.get("done"), bool):
-        return bad_request("image and done are required")
     try:
-        batch = await run(batches.set_done, get_store(request), batch_id, body["image"], body["done"])
+        batch = batches.set_done(get_store(request), req.batch_id, req.image, req.done)
     except batches.BatchError as exc:
-        return bad_request(str(exc))
+        raise Refused(400, str(exc)) from None
     if batch is None:
-        return not_found("no such batch")
-    return JSONResponse({"skipped": batch["skipped"]})
+        raise Refused(404, "no such batch")
+    return S.BatchDoneReply(skipped=batch["skipped"])
 
 
 @route(
     "POST /api/ais/batches/{batch_id}/reset",
+    bulk=True,
     summary="Reset a batch's results",
     tag='AIS',
     role=ADMIN,
     description="Body: {scope: all | auto}: delete the batch's results (admins), to run it again. The Batches screen offers a backup export first.",
     errors=(400, 403, 404),
 )
-async def batch_reset(request: Request, req: S.BatchResetRequest) -> S.BatchResetReply:
+def batch_reset(request: Request, req: S.BatchResetRequest) -> S.BatchResetReply:
     """Body: {scope: all | auto}: delete the batch's results (admins), to run
     it again. The Batches screen offers a backup export first."""
-    body, refused = await _body(request)
-    if refused:
-        return refused
-    batch_id = parse_id(request.path_params["batch_id"])
-    if not batch_id:
-        return not_found("no such batch")
     try:
-        out = await run(batches.reset_batch, get_store(request), batch_id, body.get("scope"), _user_id(request))
+        out = batches.reset_batch(get_store(request), req.batch_id, req.scope, _user_id(request))
     except batches.BatchError as exc:
-        return bad_request(str(exc))
+        raise Refused(400, str(exc)) from None
     if out is None:
-        return not_found("no such batch")
+        raise Refused(404, "no such batch")
     batch, deleted, trash_id = out
-    return JSONResponse({"batch": await run(_batch_json, request, batch), "deleted": deleted, "trash_id": trash_id})
+    return S.BatchResetReply(batch=_batch_json(request, batch), deleted=deleted, trash_id=trash_id)
+
+
+# The bulk reset has no MCP tool: reset_batch_auto holds scope to auto, which a
+# bulk call's items could not be held to (see mcp_tools_ais.BULK_TOOLS).
+declared_of(batch_reset).bulk.op = replace(
+    declared_of(batch_reset).bulk.op,
+    mcp_http="Resetting many batches at once, all results included, is kept out of agents' reach on purpose.",
+)
 
 
 # --- trash (deleted batches and folders, reset results) ------------------------
@@ -1836,34 +1839,32 @@ async def trash_list(request: Request) -> S.TrashListReply:
 
 @route(
     "POST /api/ais/trash/{trash_id}/restore",
+    bulk=True,
     summary='Restore from the trash',
     tag='AIS',
     description='Put a deleted batch (with its AIS and lines), folder or reset back. A batch: whoever deleted it or an admin; a folder or reset: admins.',
     mcp_http='The trash only holds what the Batches screen deleted, which agents cannot do.',
     errors=(400, 403, 404),
 )
-async def trash_restore(request: Request, req: S.TrashRestoreRequest) -> S.TrashSummary:
-    body, refused = await _body(request)
-    if refused:
-        return refused
+def trash_restore(request: Request, req: S.TrashRestoreRequest) -> S.TrashSummary:
     store = get_store(request)
-    trash_id = parse_id(request.path_params["trash_id"])
-    entry = await run(batches.get_trash, store, trash_id) if trash_id else None
+    entry = batches.get_trash(store, req.trash_id)
     if entry is None:
-        return not_found("not in the trash")
+        raise Refused(404, "not in the trash")
     if not _may_restore(request, entry):
-        return forbidden("only whoever deleted it, or an admin, can put it back")
+        raise Refused(403, "only whoever deleted it, or an admin, can put it back")
     try:
-        restored = await run(batches.restore_trash, store, trash_id)
+        restored = batches.restore_trash(store, req.trash_id)
     except batches.BatchError as exc:
-        return bad_request(str(exc))
+        raise Refused(400, str(exc)) from None
     if restored is None:
-        return not_found("not in the trash")
-    return JSONResponse(restored)
+        raise Refused(404, "not in the trash")
+    return restored
 
 
 @route(
     "POST /api/ais/trash/{trash_id}/purge",
+    bulk=True,
     summary='Delete from the trash for good',
     tag='AIS',
     role=ADMIN,
@@ -1871,18 +1872,16 @@ async def trash_restore(request: Request, req: S.TrashRestoreRequest) -> S.Trash
     mcp_http="Deleting for good is kept out of agents' reach on purpose.",
     errors=(400, 403, 404),
 )
-async def trash_purge(request: Request, req: S.TrashPurgeRequest) -> S.OkReply:
+def trash_purge(request: Request, req: S.TrashPurgeRequest) -> S.OkReply:
     """Delete an entry for good (admins)."""
-    body, refused = await _body(request)
-    if refused:
-        return refused
-    trash_id = parse_id(request.path_params["trash_id"])
-    gone = await run(batches.purge_trash, get_store(request), trash_id) if trash_id else False
-    return JSONResponse({"ok": True}) if gone else not_found("not in the trash")
+    if not batches.purge_trash(get_store(request), req.trash_id):
+        raise Refused(404, "not in the trash")
+    return S.OkReply(ok=True)
 
 
 @route(
     "POST /api/ais/batches/{batch_id}/assign",
+    bulk=True,
     summary='Split a batch among people',
     tag='AIS',
     role=ADMIN,
@@ -1890,36 +1889,43 @@ async def trash_purge(request: Request, req: S.TrashPurgeRequest) -> S.OkReply:
     reply_description='The batch record: its images (each file with stored, and for admins the original names), adds, assignment, skipped, created_by_name, assignee_names, adder_names and excluded.',
     errors=(400, 403, 404),
 )
-async def batch_assign(request: Request, req: S.BatchAssignRequest) -> dict[str, Any]:
+def batch_assign(request: Request, req: S.BatchAssignRequest) -> dict[str, Any]:
     """Body: {shares: [{user_id, percent}]}: split the batch among these
     people (admins). An empty list clears the assignment."""
-    body, refused = await _body(request)
-    if refused:
-        return refused
     store = get_store(request)
-    batch_id = parse_id(request.path_params["batch_id"])
-    if not batch_id:
-        return not_found("no such batch")
-    shares = body.get("shares")
-    enabled = {u.id for u in await run(users.list_users, store) if not u.disabled}
-    if isinstance(shares, list) and any(isinstance(s, dict) and s.get("user_id") not in enabled for s in shares):
-        return bad_request("every share must be an enabled user")
+    shares = msgspec.to_builtins(req.shares)
+    enabled = {u.id for u in users.list_users(store) if not u.disabled}
+    if any(share["user_id"] not in enabled for share in shares):
+        raise Refused(400, "every share must be an enabled user")
     try:
-        batch = await run(batches.assign, store, batch_id, shares, _user_id(request))
+        batch = batches.assign(store, req.batch_id, shares, _user_id(request))
     except batches.BatchError as exc:
-        return bad_request(str(exc))
+        raise Refused(400, str(exc)) from None
     if batch is None:
-        return not_found("no such batch")
-    return JSONResponse(await run(_batch_json, request, batch))
+        raise Refused(404, "no such batch")
+    return _batch_json(request, batch)
 
 
-async def _may_change(request: Request, row: dict[str, Any]) -> bool:
+def _can_change(request: Request, row: dict[str, Any]) -> bool:
     """Whoever accepted it, the image's assignee, or an admin."""
     actor = actor_from(request)
     if row["created_by"] == actor.user.id or actor.is_admin:
         return True
-    batch = await run(batches.get_batch, get_store(request), row["batch_id"])
+    batch = batches.get_batch(get_store(request), row["batch_id"])
     return batch is not None and batches.assignee_of(batch, row["image"]) == actor.user.id
+
+
+async def _may_change(request: Request, row: dict[str, Any]) -> bool:
+    return await run(_can_change, request, row)
+
+
+def _expected(expect: Any) -> int | None:
+    """A request's expect: the rev the caller last saw, or None."""
+    return None if expect is UNSET else expect
+
+
+def _refuse_stale(exc: batches.RevConflict) -> Refused:
+    return Refused(409, str(exc), current=exc.current)
 
 
 @route(
@@ -1960,63 +1966,51 @@ async def result_add(request: Request, req: S.ResultAddRequest) -> S.AISResultSc
 
 @route(
     "POST /api/ais/results/{result_id}/delete",
+    bulk=True,
     summary='Delete an accepted AIS',
     tag='AIS',
     errors=(400, 403, 404, 409),
 )
-async def result_delete(request: Request, req: S.ResultDeleteRequest) -> S.ResultDeleteReply:
-    body, refused = await _body(request)
-    if refused:
-        return refused
+def result_delete(request: Request, req: S.ResultDeleteRequest) -> S.ResultDeleteReply:
     store = get_store(request)
-    result_id = parse_id(request.path_params["result_id"])
-    row = await run(batches.get_result, store, result_id) if result_id else None
+    row = batches.get_result(store, req.result_id) if req.result_id > 0 else None
     if row is None:
-        return not_found("no such result")
-    if not await _may_change(request, row):
-        return forbidden("only whoever accepted it, the image's assignee, or an admin, can delete it")
-    expect, bad = _expect(body)
-    if bad:
-        return bad
+        raise Refused(404, "no such result")
+    if not _can_change(request, row):
+        raise Refused(403, "only whoever accepted it, the image's assignee, or an admin, can delete it")
     try:
-        renumbered = await run(batches.delete_result, store, result_id, expect)
+        renumbered = batches.delete_result(store, req.result_id, _expected(req.expect))
     except batches.RevConflict as exc:
-        return _stale(exc)
-    return JSONResponse({"ok": True, "renumbered": renumbered})
+        raise _refuse_stale(exc) from None
+    return {"ok": True, "renumbered": renumbered}
 
 
 @route(
     "POST /api/ais/results/{result_id}/update",
+    bulk=True,
     summary='Change an accepted AIS',
     tag='AIS',
     description='Body: {row}: an accepted AIS traced again (the Edit tool). It keeps its number and origin.',
     errors=(400, 403, 404, 409),
 )
-async def result_update(request: Request, req: S.ResultUpdateRequest) -> S.AISResultSchema:
+def result_update(request: Request, req: S.ResultUpdateRequest) -> S.AISResultSchema:
     """Body: {row}: an accepted AIS traced again (the Edit tool). It keeps its
     number and origin."""
-    body, refused = await _body(request)
-    if refused:
-        return refused
     store = get_store(request)
-    result_id = parse_id(request.path_params["result_id"])
-    row = await run(batches.get_result, store, result_id) if result_id else None
+    row = batches.get_result(store, req.result_id) if req.result_id > 0 else None
     if row is None:
-        return not_found("no such result")
-    if not await _may_change(request, row):
-        return forbidden("only whoever accepted it, the image's assignee, or an admin, can change it")
-    expect, bad = _expect(body)
-    if bad:
-        return bad
+        raise Refused(404, "no such result")
+    if not _can_change(request, row):
+        raise Refused(403, "only whoever accepted it, the image's assignee, or an admin, can change it")
     try:
-        updated = await run(batches.update_result, store, result_id, body.get("row"), _user_id(request), expect)
+        updated = batches.update_result(store, req.result_id, req.row, _user_id(request), _expected(req.expect))
     except batches.RevConflict as exc:
-        return _stale(exc)
+        raise _refuse_stale(exc) from None
     except batches.BatchError as exc:
-        return bad_request(str(exc))
+        raise Refused(400, str(exc)) from None
     if updated is None:
-        return not_found("no such result")
-    return JSONResponse(updated)
+        raise Refused(404, "no such result")
+    return updated
 
 
 @route(
@@ -2147,62 +2141,51 @@ async def measurement_add(request: Request, req: S.MeasurementAddRequest) -> S.M
 
 @route(
     "POST /api/ais/measurements/{measurement_id}/update",
+    bulk=True,
     summary='Change a measurement',
     tag='AIS',
     description="Body: {measurement}: a recorded line's new ends, length and label.",
     errors=(400, 403, 404, 409),
 )
-async def measurement_update(request: Request, req: S.MeasurementUpdateRequest) -> S.MeasurementSchema:
+def measurement_update(request: Request, req: S.MeasurementUpdateRequest) -> S.MeasurementSchema:
     """Body: {measurement}: a recorded line's new ends, length and label."""
-    body, refused = await _body(request)
-    if refused:
-        return refused
     store = get_store(request)
-    line_id = parse_id(request.path_params["measurement_id"])
-    line = await run(batches.get_measurement, store, line_id) if line_id else None
+    line = batches.get_measurement(store, req.measurement_id) if req.measurement_id > 0 else None
     if line is None:
-        return not_found("no such measurement")
-    if not await _may_change(request, line):
-        return forbidden("only whoever recorded it, the image's assignee, or an admin, can change it")
-    expect, bad = _expect(body)
-    if bad:
-        return bad
+        raise Refused(404, "no such measurement")
+    if not _can_change(request, line):
+        raise Refused(403, "only whoever recorded it, the image's assignee, or an admin, can change it")
     try:
-        updated = await run(batches.update_measurement, store, line_id, body.get("measurement"), _user_id(request), expect)
+        updated = batches.update_measurement(store, req.measurement_id, msgspec.to_builtins(req.measurement),
+                                             _user_id(request), _expected(req.expect))
     except batches.RevConflict as exc:
-        return _stale(exc)
+        raise _refuse_stale(exc) from None
     except batches.BatchError as exc:
-        return bad_request(str(exc))
+        raise Refused(400, str(exc)) from None
     if updated is None:
-        return not_found("no such measurement")
-    return JSONResponse(updated)
+        raise Refused(404, "no such measurement")
+    return updated
 
 
 @route(
     "POST /api/ais/measurements/{measurement_id}/delete",
+    bulk=True,
     summary='Delete a measurement',
     tag='AIS',
     errors=(400, 403, 404, 409),
 )
-async def measurement_delete(request: Request, req: S.MeasurementDeleteRequest) -> S.MeasurementDeleteReply:
-    body, refused = await _body(request)
-    if refused:
-        return refused
+def measurement_delete(request: Request, req: S.MeasurementDeleteRequest) -> S.MeasurementDeleteReply:
     store = get_store(request)
-    line_id = parse_id(request.path_params["measurement_id"])
-    line = await run(batches.get_measurement, store, line_id) if line_id else None
+    line = batches.get_measurement(store, req.measurement_id) if req.measurement_id > 0 else None
     if line is None:
-        return not_found("no such measurement")
-    if not await _may_change(request, line):
-        return forbidden("only whoever recorded it, the image's assignee, or an admin, can delete it")
-    expect, bad = _expect(body)
-    if bad:
-        return bad
+        raise Refused(404, "no such measurement")
+    if not _can_change(request, line):
+        raise Refused(403, "only whoever recorded it, the image's assignee, or an admin, can delete it")
     try:
-        renumbered = await run(batches.delete_measurement, store, line_id, expect)
+        renumbered = batches.delete_measurement(store, req.measurement_id, _expected(req.expect))
     except batches.RevConflict as exc:
-        return _stale(exc)
-    return JSONResponse({"ok": True, "renumbered": renumbered})
+        raise _refuse_stale(exc) from None
+    return {"ok": True, "renumbered": renumbered}
 
 
 # --- folders on this machine (app/analysis/local.py) ------------------------

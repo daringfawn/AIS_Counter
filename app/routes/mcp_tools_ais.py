@@ -37,6 +37,7 @@ from starlette.responses import Response
 
 from app.analysis import auto_params as ap
 from app.analysis import auto_runner
+from app.apidocs.route import declared_of
 from app.mcp.registry import Call, Content, InvalidArguments, Refusal, Registry, Tool
 from app.models import ais as batches
 from app.routes import ais
@@ -695,6 +696,26 @@ def _specs() -> list[Spec]:
     ]
 
 
+# The tools that also come as <name>_bulk: the route's bulk version
+# (bulk=True in app/routes/ais.py), many items in one call. Deleting a batch,
+# the trash and a full reset have bulk routes over HTTP but, like their single
+# routes, no tool; reset_batch_auto fixes scope to auto, which a bulk call's
+# items could not be held to, so it has none either.
+BULK_TOOLS = ("archive_batch", "set_image_done", "assign_batch", "update_result", "delete_result",
+              "update_measurement", "delete_measurement")
+
+
+def _bulk_tool(spec: Spec) -> Tool:
+    declared = declared_of(spec.handler)
+    if declared is None or declared.bulk is None:
+        raise TypeError(f"{spec.name}: its route has no bulk=True")
+    return Tool.for_bulk(declared.bulk.endpoint, name=f"{spec.name}_bulk", title=f"{spec.title}, for many at once",
+                         description=f"Runs {spec.name} once per item: items holds each call's arguments, shared the "
+                         "arguments they have in common (an item's own win). In order; one failing does not stop the "
+                         "rest, and the reply says how each went. At most 100 items.",
+                         admin_only=spec.admin_only, destructive=spec.destructive)
+
+
 def register(registry: Registry) -> None:
     """Every tool names the route it stands for (test_mcp_parity.py). The two
     upload helpers both name POST /api/ais/files: the bytes go there over HTTP,
@@ -702,6 +723,9 @@ def register(registry: Registry) -> None:
     thumb and composite kinds are the other two image routes."""
     for spec in _specs():
         registry.register(spec.tool())
+    for spec in _specs():
+        if spec.name in BULK_TOOLS:
+            registry.register(_bulk_tool(spec))
     registry.register(AisTool(
         name="upload_instructions", endpoint=ais.upload, title="How to upload files",
         description="Image bytes do not go through MCP: POST each file's raw bytes to the url given, with your API key (Content-Type: application/octet-stream). With batch_id, also the files that batch still needs (sha, name, rel, image).",

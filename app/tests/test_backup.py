@@ -131,7 +131,7 @@ class RestoreTest(BackupTestCase):
         self.assertTrue(result.rekeyed)
         store = db.open_store(current.database_path, current.secret_key, True)
         record = store.get(db.BUCKET_USERS, user.id)
-        self.assertEqual(encryption.xchacha_decrypt_string(current.secret_key, record["totp_pending"]), secret)
+        self.assertEqual(encryption.xchacha_decrypt_string(encryption.subkey(current.secret_key, encryption.PURPOSE_TOTP), record["totp_pending"]), secret)
 
     def without_bucket(self, made: Path, bucket: str) -> Path:
         """A backup as code from before bucket existed made it: the same file
@@ -265,7 +265,7 @@ class BackupSetTest(BackupTestCase):
         with self.assertRaises((db.DecodeError, encryption.CipherTextError)):
             db.check_file(deployment / "app.db", self.cfg.secret_key, True)
         record = db.open_store(deployment / "app.db", packed_key, True).get(db.BUCKET_USERS, user.id)
-        self.assertEqual(encryption.xchacha_decrypt_string(packed_key, record["totp_pending"]), secret)
+        self.assertEqual(encryption.xchacha_decrypt_string(encryption.subkey(packed_key, encryption.PURPOSE_TOTP), record["totp_pending"]), secret)
 
     def test_each_set_gets_a_new_key(self) -> None:
         first = backup.create_set(self.store, self.cfg).manifest.key_fingerprint

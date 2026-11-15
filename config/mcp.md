@@ -13,10 +13,13 @@ Every tool POST /mcp offers. Written by scripts/api_docs.sh from the registered 
 | Tool | Route | Who | What |
 |---|---|---|---|
 | [`admin_cancel_login_link`](#admin_cancel_login_link) | [`POST /api/admin/users/{user_id}/cancel-login-link`](api.md#post-apiadminusersuser_idcancel-login-link) | admin keys | Stop an account's login link working (admin) |
+| [`admin_cancel_login_link_bulk`](#admin_cancel_login_link_bulk) | [`POST /api/bulk/admin/users/cancel-login-link`](api.md#post-apibulkadminuserscancel-login-link) | admin keys | Stop an account's login link working, for many at once (admin) |
 | [`admin_create_invite_link`](#admin_create_invite_link) | [`POST /api/admin/invite-links`](api.md#post-apiadmininvite-links) | admin keys | Create an invite link (admin) |
 | [`admin_create_user`](#admin_create_user) | [`POST /api/admin/users`](api.md#post-apiadminusers) | admin keys | Create an account (admin) |
 | [`admin_delete_invite_link`](#admin_delete_invite_link) | [`POST /api/admin/invite-links/{link_id}/delete`](api.md#post-apiadmininvite-linkslink_iddelete) | admin keys | Delete an invite link (admin) |
+| [`admin_delete_invite_link_bulk`](#admin_delete_invite_link_bulk) | [`POST /api/bulk/admin/invite-links/delete`](api.md#post-apibulkadmininvite-linksdelete) | admin keys | Delete an invite link, for many at once (admin) |
 | [`admin_delete_user`](#admin_delete_user) | [`POST /api/admin/users/{user_id}/delete`](api.md#post-apiadminusersuser_iddelete) | admin keys | Delete an account (admin) |
+| [`admin_delete_user_bulk`](#admin_delete_user_bulk) | [`POST /api/bulk/admin/users/delete`](api.md#post-apibulkadminusersdelete) | admin keys | Delete an account, for many at once (admin) |
 | [`admin_get_theme_defaults`](#admin_get_theme_defaults) | [`GET /api/admin/theme-defaults`](api.md#get-apiadmintheme-defaults) | admin keys | Default themes (admin) |
 | [`admin_list_invite_links`](#admin_list_invite_links) | [`GET /api/admin/invite-links`](api.md#get-apiadmininvite-links) | admin keys | List invite links (admin) |
 | [`admin_list_user_sessions`](#admin_list_user_sessions) | [`GET /api/admin/users/{user_id}/sessions`](api.md#get-apiadminusersuser_idsessions) | admin keys | An account's signed-in devices (admin) |
@@ -25,15 +28,23 @@ Every tool POST /mcp offers. Written by scripts/api_docs.sh from the registered 
 | [`admin_rename_invite_link`](#admin_rename_invite_link) | [`POST /api/admin/invite-links/{link_id}/rename`](api.md#post-apiadmininvite-linkslink_idrename) | admin keys | Rename an invite link (admin) |
 | [`admin_rename_user`](#admin_rename_user) | [`POST /api/admin/users/{user_id}/rename`](api.md#post-apiadminusersuser_idrename) | admin keys | Rename someone (admin) |
 | [`admin_reset_two_factor`](#admin_reset_two_factor) | [`POST /api/admin/users/{user_id}/reset-two-factor`](api.md#post-apiadminusersuser_idreset-two-factor) | admin keys | Turn off an account's two-factor (admin) |
+| [`admin_reset_two_factor_bulk`](#admin_reset_two_factor_bulk) | [`POST /api/bulk/admin/users/reset-two-factor`](api.md#post-apibulkadminusersreset-two-factor) | admin keys | Turn off an account's two-factor, for many at once (admin) |
 | [`admin_restore_invite_link`](#admin_restore_invite_link) | [`POST /api/admin/invite-links/{link_id}/restore`](api.md#post-apiadmininvite-linkslink_idrestore) | admin keys | Undo deleting an invite link (admin) |
+| [`admin_restore_invite_link_bulk`](#admin_restore_invite_link_bulk) | [`POST /api/bulk/admin/invite-links/restore`](api.md#post-apibulkadmininvite-linksrestore) | admin keys | Undo deleting an invite link, for many at once (admin) |
 | [`admin_revoke_access`](#admin_revoke_access) | [`POST /api/admin/users/{user_id}/revoke-access`](api.md#post-apiadminusersuser_idrevoke-access) | admin keys | Revoke a user's access (admin) |
+| [`admin_revoke_access_bulk`](#admin_revoke_access_bulk) | [`POST /api/bulk/admin/users/revoke-access`](api.md#post-apibulkadminusersrevoke-access) | admin keys | Revoke a user's access, for many at once (admin) |
 | [`admin_revoke_invite_link`](#admin_revoke_invite_link) | [`POST /api/admin/invite-links/{link_id}/revoke`](api.md#post-apiadmininvite-linkslink_idrevoke) | admin keys | Switch off an invite link (admin) |
+| [`admin_revoke_invite_link_bulk`](#admin_revoke_invite_link_bulk) | [`POST /api/bulk/admin/invite-links/revoke`](api.md#post-apibulkadmininvite-linksrevoke) | admin keys | Switch off an invite link, for many at once (admin) |
 | [`admin_revoke_user_session`](#admin_revoke_user_session) | [`POST /api/admin/users/{user_id}/sessions/{session_id}/revoke`](api.md#post-apiadminusersuser_idsessionssession_idrevoke) | admin keys | Sign out one of an account's devices (admin) |
+| [`admin_revoke_user_session_bulk`](#admin_revoke_user_session_bulk) | [`POST /api/bulk/admin/users/sessions/revoke`](api.md#post-apibulkadminuserssessionsrevoke) | admin keys | Sign out one of an account's devices, for many at once (admin) |
 | [`admin_set_invite_link_limits`](#admin_set_invite_link_limits) | [`POST /api/admin/invite-links/{link_id}/limits`](api.md#post-apiadmininvite-linkslink_idlimits) | admin keys | Change an invite link's places and expiry (admin) |
 | [`admin_set_theme_defaults`](#admin_set_theme_defaults) | [`POST /api/admin/theme-defaults`](api.md#post-apiadmintheme-defaults) | admin keys | Replace the default themes (admin) |
 | [`admin_set_user_disabled`](#admin_set_user_disabled) | [`POST /api/admin/users/{user_id}/disabled`](api.md#post-apiadminusersuser_iddisabled) | admin keys | Disable or enable a user (admin) |
+| [`admin_set_user_disabled_bulk`](#admin_set_user_disabled_bulk) | [`POST /api/bulk/admin/users/disabled`](api.md#post-apibulkadminusersdisabled) | admin keys | Disable or enable a user, for many at once (admin) |
 | [`admin_set_user_role`](#admin_set_user_role) | [`POST /api/admin/users/{user_id}/role`](api.md#post-apiadminusersuser_idrole) | admin keys | Change an account's role (admin) |
+| [`admin_set_user_role_bulk`](#admin_set_user_role_bulk) | [`POST /api/bulk/admin/users/role`](api.md#post-apibulkadminusersrole) | admin keys | Change an account's role, for many at once (admin) |
 | [`admin_switch_on_invite_link`](#admin_switch_on_invite_link) | [`POST /api/admin/invite-links/{link_id}/switch-on`](api.md#post-apiadmininvite-linkslink_idswitch-on) | admin keys | Switch an invite link back on (admin) |
+| [`admin_switch_on_invite_link_bulk`](#admin_switch_on_invite_link_bulk) | [`POST /api/bulk/admin/invite-links/switch-on`](api.md#post-apibulkadmininvite-linksswitch-on) | admin keys | Switch an invite link back on, for many at once (admin) |
 | [`cancel_my_login_link`](#cancel_my_login_link) | [`POST /api/account/login-link/cancel`](api.md#post-apiaccountlogin-linkcancel) | any key | Stop your own login link working |
 | [`create_my_login_link`](#create_my_login_link) | [`POST /api/account/login-link`](api.md#post-apiaccountlogin-link) | any key | A login link for yourself |
 | [`label_my_session`](#label_my_session) | [`POST /api/account/sessions/{session_id}/label`](api.md#post-apiaccountsessionssession_idlabel) | any key | Name one of your devices |
@@ -42,6 +53,7 @@ Every tool POST /mcp offers. Written by scripts/api_docs.sh from the registered 
 | [`rename_account`](#rename_account) | [`POST /api/account/rename`](api.md#post-apiaccountrename) | any key | Rename your account |
 | [`revoke_my_other_sessions`](#revoke_my_other_sessions) | [`POST /api/account/sessions/revoke-others`](api.md#post-apiaccountsessionsrevoke-others) | any key | Sign out all your devices |
 | [`revoke_my_session`](#revoke_my_session) | [`POST /api/account/sessions/{session_id}/revoke`](api.md#post-apiaccountsessionssession_idrevoke) | any key | Sign out one of your devices |
+| [`revoke_my_session_bulk`](#revoke_my_session_bulk) | [`POST /api/bulk/account/sessions/revoke`](api.md#post-apibulkaccountsessionsrevoke) | any key | Sign out one of your devices, for many at once |
 | [`set_shortcuts`](#set_shortcuts) | [`POST /api/account/shortcuts`](api.md#post-apiaccountshortcuts) | any key | Set your keyboard shortcuts |
 | [`set_theme`](#set_theme) | [`POST /api/account/theme`](api.md#post-apiaccounttheme) | any key | Pick your theme |
 | [`set_themes`](#set_themes) | [`POST /api/account/themes`](api.md#post-apiaccountthemes) | any key | Replace your own themes |
@@ -93,6 +105,13 @@ Every tool POST /mcp offers. Written by scripts/api_docs.sh from the registered 
 | [`cancel_auto_run`](#cancel_auto_run) | [`POST /api/ais/auto/{run_id}/cancel`](api.md#post-apiaisautorun_idcancel) | any key | Stop an auto run |
 | [`export_report`](#export_report) | [`GET /api/ais/report`](api.md#get-apiaisreport) | any key | Export a report as JSON |
 | [`compare_batches`](#compare_batches) | [`POST /api/ais/compare`](api.md#post-apiaiscompare) | admin keys | Compare batches by treatment (admin) |
+| [`archive_batch_bulk`](#archive_batch_bulk) | [`POST /api/bulk/ais/batches/archive`](api.md#post-apibulkaisbatchesarchive) | any key | Archive or bring back a batch, for many at once |
+| [`set_image_done_bulk`](#set_image_done_bulk) | [`POST /api/bulk/ais/batches/done`](api.md#post-apibulkaisbatchesdone) | any key | Mark an image done, for many at once |
+| [`assign_batch_bulk`](#assign_batch_bulk) | [`POST /api/bulk/ais/batches/assign`](api.md#post-apibulkaisbatchesassign) | admin keys | Assign a batch (admin), for many at once |
+| [`update_result_bulk`](#update_result_bulk) | [`POST /api/bulk/ais/results/update`](api.md#post-apibulkaisresultsupdate) | any key | Change an AIS, for many at once |
+| [`delete_result_bulk`](#delete_result_bulk) | [`POST /api/bulk/ais/results/delete`](api.md#post-apibulkaisresultsdelete) | any key | Delete an AIS, for many at once |
+| [`update_measurement_bulk`](#update_measurement_bulk) | [`POST /api/bulk/ais/measurements/update`](api.md#post-apibulkaismeasurementsupdate) | any key | Change a recorded line, for many at once |
+| [`delete_measurement_bulk`](#delete_measurement_bulk) | [`POST /api/bulk/ais/measurements/delete`](api.md#post-apibulkaismeasurementsdelete) | any key | Delete a recorded line, for many at once |
 | [`upload_instructions`](#upload_instructions) | [`POST /api/ais/files`](api.md#post-apiaisfiles) | any key | How to upload files |
 | [`files_stored`](#files_stored) | [`POST /api/ais/files`](api.md#post-apiaisfiles) | any key | Which files the server has |
 | [`get_image`](#get_image) | [`GET /api/ais/files/{sha}/view.png`](api.md#get-apiaisfilesshaviewpng) | any key | Look at an image |
@@ -114,6 +133,24 @@ Void an account's live login link without making a new one: a link that went som
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+
+## admin_cancel_login_link_bulk
+
+Runs admin_cancel_login_link once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/users/cancel-login-link`](api.md#post-apibulkadminuserscancel-login-link) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 
 ## admin_create_invite_link
 
@@ -168,6 +205,24 @@ Take an invite link off the list and stop it working. The accounts it made stay.
 |---|---|---|---|---|
 | `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
 
+## admin_delete_invite_link_bulk
+
+Runs admin_delete_invite_link once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/invite-links/delete`](api.md#post-apibulkadmininvite-linksdelete) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+
 ## admin_delete_user
 
 Remove an account for good, with its sessions, login link and API keys. Cannot be undone: admin_set_user_disabled is the reversible version. Only the owner deletes an admin; nobody deletes the owner or themselves.
@@ -183,6 +238,24 @@ Remove an account for good, with its sessions, login link and API keys. Cannot b
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+
+## admin_delete_user_bulk
+
+Runs admin_delete_user once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/users/delete`](api.md#post-apibulkadminusersdelete) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 
 ## admin_get_theme_defaults
 
@@ -327,6 +400,24 @@ For someone who lost both their phone and their recovery codes: switches their t
 |---|---|---|---|---|
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
 
+## admin_reset_two_factor_bulk
+
+Runs admin_reset_two_factor once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/users/reset-two-factor`](api.md#post-apibulkadminusersreset-two-factor) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+
 ## admin_restore_invite_link
 
 Bring back an invite link deleted in the last few minutes, working as before. The link then counts as this key's: revoking the key switches it off.
@@ -342,6 +433,24 @@ Bring back an invite link deleted in the last few minutes, working as before. Th
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
 | `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
+
+## admin_restore_invite_link_bulk
+
+Runs admin_restore_invite_link once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/invite-links/restore`](api.md#post-apibulkadmininvite-linksrestore) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 
 ## admin_revoke_access
 
@@ -359,6 +468,24 @@ For an account that may be compromised: ends every session and voids its live lo
 |---|---|---|---|---|
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
 
+## admin_revoke_access_bulk
+
+Runs admin_revoke_access once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/users/revoke-access`](api.md#post-apibulkadminusersrevoke-access) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+
 ## admin_revoke_invite_link
 
 Stop an invite link from letting anyone else join or sign in through it. Accounts it already made keep working. Cannot be switched back on.
@@ -374,6 +501,24 @@ Stop an invite link from letting anyone else join or sign in through it. Account
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
 | `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
+
+## admin_revoke_invite_link_bulk
+
+Runs admin_revoke_invite_link once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/invite-links/revoke`](api.md#post-apibulkadmininvite-linksrevoke) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 
 ## admin_revoke_user_session
 
@@ -391,6 +536,25 @@ End one of an account's sessions, rather than all of them with admin_revoke_acce
 |---|---|---|---|---|
 | `session_id` | string | yes |  | The device's id, from GET /api/account/sessions or GET /api/admin/users/{user_id}/sessions (list_my_sessions or admin_list_user_sessions over MCP). |
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+
+## admin_revoke_user_session_bulk
+
+Runs admin_revoke_user_session once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/users/sessions/revoke`](api.md#post-apibulkadminuserssessionsrevoke) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].session_id` | string | yes |  | The device's id, from GET /api/account/sessions or GET /api/admin/users/{user_id}/sessions (list_my_sessions or admin_list_user_sessions over MCP). |
+| `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 
 ## admin_set_invite_link_limits
 
@@ -468,6 +632,26 @@ Switch an account off (disabled: true) or back on (false). Disabling signs it ou
 | `disabled` | boolean | yes |  |  |
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
 
+## admin_set_user_disabled_bulk
+
+Runs admin_set_user_disabled once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/users/disabled`](api.md#post-apibulkadminusersdisabled) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].disabled` | boolean | no |  |  |
+| `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.disabled` | boolean | no |  |  |
+
 ## admin_set_user_role
 
 Make an account an admin or an ordinary user. Only the owner takes an admin's rights away; the owner is always an admin, and nobody changes their own role. Becoming an admin ends the account's sessions and live login link.
@@ -485,6 +669,26 @@ Make an account an admin or an ordinary user. Only the owner takes an admin's ri
 | `role` | string | yes | one of `admin`, `user` |  |
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
 
+## admin_set_user_role_bulk
+
+Runs admin_set_user_role once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/users/role`](api.md#post-apibulkadminusersrole) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].role` | string | no | one of `admin`, `user` |  |
+| `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.role` | string | no | one of `admin`, `user` |  |
+
 ## admin_switch_on_invite_link
 
 Undo admin_revoke_invite_link: anyone still holding the link can use it again. The link then counts as this key's: revoking the key switches it off.
@@ -500,6 +704,24 @@ Undo admin_revoke_invite_link: anyone still holding the link can use it again. T
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
 | `link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
+
+## admin_switch_on_invite_link_bulk
+
+Runs admin_switch_on_invite_link once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/admin/invite-links/switch-on`](api.md#post-apibulkadmininvite-linksswitch-on) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].link_id` | string | yes |  | The link's id, from GET /api/admin/invite-links (admin_list_invite_links over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 
 ## cancel_my_login_link
 
@@ -518,7 +740,7 @@ Void your account's live login link without making a new one. Devices it already
 
 ## create_my_login_link
 
-A link that signs your own account in on a browser or another device. Only a key with your account's full role may ask: one scoped down to user on an admin account is refused. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.
+A link that signs your own account in on a browser or another device. An API key may ask only if your account let it, from a browser session (POST /api/keys/{key_id}/sign-in); its link works once, for at most 15 minutes. Only works if this key was allowed to make sign-in links, on the API keys card. Answers with login_url (open it to sign in; it works once, for at most 15 minutes), expires_at and max_uses. Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.
 
 |  |  |
 |---|---|
@@ -632,6 +854,24 @@ End one of your signed-in sessions; that browser has to sign in again.
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
 | `session_id` | string | yes |  | The device's id, from GET /api/account/sessions or GET /api/admin/users/{user_id}/sessions (list_my_sessions or admin_list_user_sessions over MCP). |
+
+## revoke_my_session_bulk
+
+Runs revoke_my_session once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/account/sessions/revoke`](api.md#post-apibulkaccountsessionsrevoke) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].session_id` | string | yes |  | The device's id, from GET /api/account/sessions or GET /api/admin/users/{user_id}/sessions (list_my_sessions or admin_list_user_sessions over MCP). |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 
 ## set_shortcuts
 
@@ -1584,6 +1824,174 @@ The comparison export (comparison.xlsx) as JSON: per measure the culture means, 
 | `tests` | array of string | no |  |  |
 | `units` | array of string | no |  |  |
 
+## archive_batch_bulk
+
+Runs archive_batch once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/ais/batches/archive`](api.md#post-apibulkaisbatchesarchive) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].archived` | boolean | no |  |  |
+| `items[].batch_id` | integer | yes | at least 1 |  |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.archived` | boolean | no |  |  |
+
+## set_image_done_bulk
+
+Runs set_image_done once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/ais/batches/done`](api.md#post-apibulkaisbatchesdone) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].batch_id` | integer | yes | at least 1 |  |
+| `items[].done` | boolean | no |  |  |
+| `items[].image` | string | no |  | The image's key. |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.done` | boolean | no |  |  |
+| `shared.image` | string | no |  | The image's key. |
+
+## assign_batch_bulk
+
+Runs assign_batch once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/ais/batches/assign`](api.md#post-apibulkaisbatchesassign) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].batch_id` | integer | yes | at least 1 |  |
+| `items[].shares` | array of object | no |  |  |
+| `items[].shares[].percent` | number | yes |  | Above 0; the shares are scaled to sum 100. |
+| `items[].shares[].user_id` | integer | yes |  |  |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.shares` | array of object | no |  |  |
+| `shared.shares[].percent` | number | yes |  | Above 0; the shares are scaled to sum 100. |
+| `shared.shares[].user_id` | integer | yes |  |  |
+
+## update_result_bulk
+
+Runs update_result once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/ais/results/update`](api.md#post-apibulkaisresultsupdate) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+| `items[].result_id` | integer | yes |  |  |
+| `items[].row` | object | no |  | The new trace's numbers, texts and pixels, as POST /api/ais/trace gives them. |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+| `shared.row` | object | no |  | The new trace's numbers, texts and pixels, as POST /api/ais/trace gives them. |
+
+## delete_result_bulk
+
+Runs delete_result once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/ais/results/delete`](api.md#post-apibulkaisresultsdelete) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+| `items[].result_id` | integer | yes |  |  |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+
+## update_measurement_bulk
+
+Runs update_measurement once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/ais/measurements/update`](api.md#post-apibulkaismeasurementsupdate) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+| `items[].measurement` | object | no |  |  |
+| `items[].measurement.a_x` | number | yes |  |  |
+| `items[].measurement.a_y` | number | yes |  |  |
+| `items[].measurement.b_x` | number | yes |  |  |
+| `items[].measurement.b_y` | number | yes |  |  |
+| `items[].measurement.label` | string | no |  |  |
+| `items[].measurement.length_px` | number | yes |  |  |
+| `items[].measurement.length_um` | number | yes |  |  |
+| `items[].measurement.pixconv` | number | yes |  |  |
+| `items[].measurement.type` | string | no |  | One of the team's measurement types, or empty. |
+| `items[].measurement_id` | integer | yes |  |  |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+| `shared.measurement` | object | no |  |  |
+| `shared.measurement.a_x` | number | yes |  |  |
+| `shared.measurement.a_y` | number | yes |  |  |
+| `shared.measurement.b_x` | number | yes |  |  |
+| `shared.measurement.b_y` | number | yes |  |  |
+| `shared.measurement.label` | string | no |  |  |
+| `shared.measurement.length_px` | number | yes |  |  |
+| `shared.measurement.length_um` | number | yes |  |  |
+| `shared.measurement.pixconv` | number | yes |  |  |
+| `shared.measurement.type` | string | no |  | One of the team's measurement types, or empty. |
+
+## delete_measurement_bulk
+
+Runs delete_measurement once per item: items holds each call's arguments, shared the arguments they have in common (an item's own win). In order; one failing does not stop the rest, and the reply says how each went. At most 100 items.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/bulk/ais/measurements/delete`](api.md#post-apibulkaismeasurementsdelete) |
+| Read only | no |
+| Destructive | yes |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
+| `items[].expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+| `items[].measurement_id` | integer | yes |  |  |
+| `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
+| `shared.expect` | integer | no | at least 0 | The rev you last saw. Answers 409, with the record as it is now, if it has moved on. |
+
 ## upload_instructions
 
 Image bytes do not go through MCP: POST each file's raw bytes to the url given, with your API key (Content-Type: application/octet-stream). With batch_id, also the files that batch still needs (sha, name, rel, image).
@@ -1713,6 +2121,10 @@ Routes an API key may call that have no tool, and why.
 | [`POST /api/ais/results/import`](api.md#post-apiaisresultsimport) | A results file upload: MCP messages are JSON, and clients cap their size. Send it over HTTP with the same key. |
 | [`POST /api/ais/trash/{trash_id}/purge`](api.md#post-apiaistrashtrash_idpurge) | Deleting for good is kept out of agents' reach on purpose. |
 | [`POST /api/ais/trash/{trash_id}/restore`](api.md#post-apiaistrashtrash_idrestore) | The trash only holds what the Batches screen deleted, which agents cannot do. |
+| [`POST /api/bulk/ais/batches/delete`](api.md#post-apibulkaisbatchesdelete) | Deleting a whole batch is kept out of agents' reach on purpose. |
+| [`POST /api/bulk/ais/batches/reset`](api.md#post-apibulkaisbatchesreset) | Resetting many batches at once, all results included, is kept out of agents' reach on purpose. |
+| [`POST /api/bulk/ais/trash/purge`](api.md#post-apibulkaistrashpurge) | Deleting for good is kept out of agents' reach on purpose. |
+| [`POST /api/bulk/ais/trash/restore`](api.md#post-apibulkaistrashrestore) | The trash only holds what the Batches screen deleted, which agents cannot do. |
 | [`POST /api/logout`](api.md#post-apilogout) | Ends a browser session; a key has none to end. |
 | [`POST /api/logs/events`](api.md#post-apilogsevents) | The browser's own activity reports (track.js), not an action. |
 | [`POST /mcp`](api.md#post-mcp) | The MCP endpoint itself. |

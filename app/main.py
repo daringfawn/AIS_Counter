@@ -27,7 +27,7 @@ from app.models import ais as ais_batches
 from app.core import assets, bootstrap, config, config_live, db, graceful, housekeeping, jobs, language, logs, server_lock
 from app.core import sse
 from app.core.maintenance import Maintenance
-from app.core.middleware import EXCEPTION_HANDLERS, RateLimit, SecurityHeaders
+from app.core.middleware import EXCEPTION_HANDLERS, NoStore, RateLimit, SecurityHeaders
 from app.core.request_id import RequestID
 from app.core.request_log import RequestLog
 from app.core.security import LoadActor
@@ -108,9 +108,10 @@ def build_app(
         # it; and only then can maintenance mode refuse it, knowing who asked.
         middleware=[
             Middleware(RequestID),
+            Middleware(NoStore),
             Middleware(SecurityHeaders, settings=settings),
             Middleware(RequestBodyLimitMiddleware, max_body_size=cfg.body_limit_bytes),
-            Middleware(RateLimit, settings=settings),
+            Middleware(RateLimit, settings=settings, logger=logger),
             Middleware(LoadActor, store=store, settings=settings),
             Middleware(RequestLog, settings=settings, logger=logger),
             Middleware(Maintenance, store=store, settings=settings),

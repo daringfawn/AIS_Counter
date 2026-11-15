@@ -1,6 +1,8 @@
 """Login links made with an API key, over HTTP and MCP: allowed, but held to
 once and a day (admin.checked_link_options), and revoking the key voids them
-(see test_admin_users). A browser session keeps every choice. Both keys in
+(see test_admin_users). A key's link for its own account also needs the
+account to have let that key make sign-in links (APIKey.may_sign_in, S9),
+and lasts at most 15 minutes; setUp lets admin_key. A browser session keeps every choice. Both keys in
 RoutesTestCase belong to the owner, an admin: admin_key carries the owner's
 full role, user_key is scoped down to user, so it may not make the owner a
 login link at all (account.create_my_login_link_checked)."""
@@ -10,7 +12,7 @@ from typing import Any
 
 from starlette.testclient import TestClient
 
-from app.models import from_iso, utc_now
+from app.models import api_keys, from_iso, utc_now
 from app.routes.admin import KEY_LINK_MESSAGE
 from app.tests.route_support import RoutesTestCase
 
@@ -19,6 +21,8 @@ class LoginLinksWithKeysTest(RoutesTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.set_config(login_token_ttl_seconds=1800, multi_use_login_token_ttl_seconds=7 * 86400)
+        key = next(key for key in api_keys.list_api_keys_for_user(self.store, self.owner.id) if key.name == "admin")
+        api_keys.set_api_key_sign_in(self.store, key.id, self.owner.id, True)
 
     def sign_in_with(self, reply: dict) -> int:
         credential = reply["login_path"].removeprefix("/login/")
@@ -46,16 +50,20 @@ class LoginLinksWithKeysTest(RoutesTestCase):
         status, reply = self.call("POST", "/api/account/login-link", key=self.admin_key, body={})
         self.assertEqual(status, 200, reply)
         self.assertEqual((reply["max_uses"], reply["unlimited"]), (1, False))
-        self.assertEqual(reply["expires_in_seconds"], 1800)
+        self.assertEqual(reply["expires_in_seconds"], api_keys.KEY_LOGIN_LINK_TTL_SECONDS)
         self.assertTrue(reply["login_url"].endswith(reply["login_path"]))
         self.assertEqual(self.sign_in_with(reply), 200)
         self.assertNotEqual(self.sign_in_with(reply), 200)
 
-    def test_a_key_default_expiry_is_held_to_a_day(self) -> None:
+    def test_a_key_default_expiry_is_held_to_15_minutes(self) -> None:
         self.set_config(login_token_ttl_seconds=3 * 86400)
         status, reply = self.call("POST", "/api/account/login-link", key=self.admin_key, body={})
         self.assertEqual(status, 200, reply)
-        self.assertLessEqual(reply["expires_in_seconds"], 86400)
+        self.assertLessEqual(reply["expires_in_seconds"], api_keys.KEY_LOGIN_LINK_TTL_SECONDS)
+
+    def test_a_key_not_let_make_links_is_refused(self) -> None:
+        status, reply = self.call("POST", "/api/account/login-link", key=self.user_key, body={})
+        self.assertEqual(status, 403, reply)
 
     def test_a_key_may_not_ask_for_more(self) -> None:
         for body in [{"max_uses": 3}, {"max_uses": 0}, {"expires_in_minutes": 0}, {"expires_in_minutes": 1441}]:

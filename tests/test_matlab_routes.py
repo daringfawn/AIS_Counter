@@ -54,7 +54,7 @@ class Harness:
             users.set_matlab_path(self.store, user.id, path)
         session_id, credential, session = sessions.new_session(user.id, 3600)
         self.store.put(BUCKET_SESSIONS, session_id, session.to_record())
-        cookie = encryption.xchacha_encrypt_string(KEY, credential)
+        cookie = encryption.xchacha_encrypt_string(encryption.subkey(KEY, encryption.PURPOSE_COOKIE), credential)
         return SimpleNamespace(id=user.id, cookie=f"s={cookie}", csrf=session.csrf_token)
 
     def key(self, who, purpose=""):
