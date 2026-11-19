@@ -26,6 +26,10 @@ const Api = {
       throw error;
     }
 
+    // Which build answered: a page left open across a deploy hears about it
+    // here (fresh.js). Not every page loads fresh.js.
+    if ( typeof Fresh !== "undefined" ) Fresh.heard( response.headers.get( "X-App-Version" ) );
+
     let payload = {};
     try {
       payload = await response.json();
@@ -54,7 +58,7 @@ const Api = {
   // nothing on this page can work. Say so, rather than leaving every button to
   // fail one at a time.
   sessionEnded() {
-    window.location.replace( "/?login=ended" );
+    window.location.replace( "/signed-out/ended" );
   },
 
   // A failure on the server's side comes with a reference, which is the one
@@ -154,13 +158,13 @@ const Api = {
   saveShortcuts( map )         { return this.post( "/api/account/shortcuts" , { shortcuts: map } ); },
   saveMatlabPath( path )       { return this.post( "/api/account/matlab" , { path: path } ); },
   mintHelperKey()              { return this.post( "/api/ais/matlab/helper/key" ); },
-  // Your whole list of themes (null: back to the defaults) and the one you
-  // use; or only the one you use. See theme.js.
-  setThemes( themes , id )     { return this.post( "/api/account/themes" , { themes: themes , theme_id: id } ); },
+  // Your whole list of themes (null: back to the defaults), the built-in
+  // themes it has seen and the one you use; or only the one you use. See theme.js.
+  setThemes( themes , id , builtins ) { return this.post( "/api/account/themes" , { themes: themes , theme_id: id , builtins: builtins || 0 } ); },
   setTheme( id )               { return this.post( "/api/account/theme" , { theme_id: id } ); },
   // The themes everyone without their own list sees; null is the built-in ones.
   themeDefaults()              { return this.request( "/api/admin/theme-defaults" ); },
-  setThemeDefaults( themes )   { return this.post( "/api/admin/theme-defaults" , { themes: themes } ); },
+  setThemeDefaults( themes , builtins ) { return this.post( "/api/admin/theme-defaults" , { themes: themes , builtins: builtins || 0 } ); },
   // digest is what password.js derived; the password itself is never sent.
   // An empty digest removes the password.
   setPassword( username , digest , code ) {

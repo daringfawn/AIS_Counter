@@ -24,10 +24,10 @@ from app.analysis import matlab_jobs
 from app.analysis.auto_runner import AutoRuns
 from app.analysis.service import Library
 from app.models import ais as ais_batches
-from app.core import assets, bootstrap, config, config_live, db, graceful, housekeeping, jobs, language, logs, server_lock
+from app.core import assets, bootstrap, config, config_live, db, graceful, housekeeping, jobs, language, live_reload, logs, server_lock
 from app.core import sse
 from app.core.maintenance import Maintenance
-from app.core.middleware import EXCEPTION_HANDLERS, NoStore, RateLimit, SecurityHeaders
+from app.core.middleware import EXCEPTION_HANDLERS, AppVersion, NoStore, RateLimit, SecurityHeaders
 from app.core.request_id import RequestID
 from app.core.request_log import RequestLog
 from app.core.security import LoadActor
@@ -50,7 +50,12 @@ async def config_watch(settings: config_live.Holder) -> None:
 
 
 def build_app(
-    settings: config_live.Holder, store: db.Store, lang: language.Language, static_server: StaticServer, version: str = "dev"
+    settings: config_live.Holder,
+    store: db.Store,
+    lang: language.Language,
+    static_server: StaticServer,
+    version: str = "dev",
+    reload_watcher: live_reload.Watcher | None = None,
 ) -> Starlette:
     # The configuration the server started with: what is set up once (the
     # body limit, the log's routes and directory). Everything read per
@@ -97,7 +102,7 @@ def build_app(
             await run_in_threadpool(logger.close)
 
     app = Starlette(
-        routes=build_routes(static_server, cfg),
+        routes=build_routes(static_server, cfg, reload_watcher),
         # Outermost first. Every request gets its reference and is counted,
         # whatever becomes of it; headers go on everything; the body limit is
         # here rather than Starlette's max_body_size= because that one sits
@@ -109,6 +114,7 @@ def build_app(
         middleware=[
             Middleware(RequestID),
             Middleware(NoStore),
+            Middleware(AppVersion, version=version),
             Middleware(SecurityHeaders, settings=settings),
             Middleware(RequestBodyLimitMiddleware, max_body_size=cfg.body_limit_bytes),
             Middleware(RateLimit, settings=settings, logger=logger),
@@ -137,6 +143,7 @@ def build_app(
     app.state.matlab_jobs = matlab_jobs.Jobs()
     # Reported to MCP clients as serverInfo.version.
     app.state.version = version
+    app.state.live_reload = reload_watcher
     return app
 
 
@@ -160,7 +167,10 @@ def serve(version: str) -> None:
 
     bootstrap.ensure_first_admin(store, cfg, "Admin")
 
-    app = build_app(config_live.Holder(cfg), store, lang, static_server, version)
+    # Tell open pages about a change to the frontend (server.live_reload).
+    # See app/core/live_reload.py.
+    reload_watcher = live_reload.Watcher(bundle.static_dir) if cfg.live_reloads(version) else None
+    app = build_app(config_live.Holder(cfg), store, lang, static_server, version, reload_watcher)
 
     print(f"[start] {cfg.project_name} {version} listening on {cfg.listen_address} (secure cookies: {cfg.secure_cookies})")
     print(f"[url]    {cfg.url}  (from {cfg.url_source})")
@@ -186,11 +196,16 @@ def serve(version: str) -> None:
         print(f"[logs]   {cfg.logs.dir} (keeping {cfg.logs.retention_days} days, up to {cfg.logs.max_total_bytes // 1024 // 1024} MB)")
     print(f"[assets] {bundle.source}", flush=True)
 
+    def stop_waiting() -> None:
+        """Before uvicorn waits for connections: it would otherwise wait the
+        full 10 seconds for a request that is never going to finish."""
+        app.state.log_hub.close()
+        if reload_watcher is not None:
+            reload_watcher.close()
+
     graceful.run(
         app,
-        # Before uvicorn waits for connections: it would otherwise wait the
-        # full 10 seconds for a stream that is never going to finish.
-        on_stop=app.state.log_hub.close,
+        on_stop=stop_waiting,
         host=cfg.host,
         port=cfg.port,
         # An empty Server header keeps the response from advertising which

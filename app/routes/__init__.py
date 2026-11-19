@@ -41,12 +41,14 @@ from app.core.security import RequireAdmin, RequireLogin, RequireSession
 from app.core.security import Guard
 from app.core.security import RequireAPIKey
 from app.core.security import RequireOwner
+from app.core.live_reload import Watcher
 from app.core.static_files import StaticServer
 from app.routes import (
     account,
     admin,
     ais,
     ais_matlab,
+    api_docs_md,
     api_keys,
     auth,
     invite_links,
@@ -144,6 +146,7 @@ MODULES = [
     admin,
     ais,
     ais_matlab,
+    api_docs_md,
     api_keys,
     auth,
     invite_links,
@@ -274,7 +277,9 @@ BODY_LIMITS: dict[str, Callable[[Config | None], int]] = {
 }
 
 
-def build_routes(static_server: StaticServer, cfg: Config | None = None) -> list[BaseRoute]:
+def build_routes(
+    static_server: StaticServer, cfg: Config | None = None, live_reload: Watcher | None = None
+) -> list[BaseRoute]:
     """cfg is the configuration the server started with; it sets only the
     upload limit (BODY_LIMITS). The docs build the table without one."""
     routes: list[BaseRoute] = [
@@ -283,14 +288,21 @@ def build_routes(static_server: StaticServer, cfg: Config | None = None) -> list
         # person confirms. See auth.py and join.py.
         Route("/login/{credential:path}", static_server.serve_login_page),
         Route("/join/{credential:path}", static_server.serve_join_page),
+        # The readable API and MCP references (app/routes/api_docs_md.py).
+        Route("/docs/{page:path}", static_server.serve_docs_page),
     ]
     for declared in declared_routes():
         middleware = [Middleware(guard) for guard in declared.guards]
         limit = BODY_LIMITS.get(f"{declared.method} {declared.path}")
         extra = {"max_body_size": limit(cfg)} if limit is not None else {}
         routes.append(Route(declared.path, declared.endpoint, methods=[declared.method], middleware=middleware, **extra))
+    # Open pages wait here to hear about a change to the frontend
+    # (server.live_reload; app/core/live_reload.py, static/js/live.js). Not
+    # part of the API.
+    if live_reload is not None:
+        routes.append(Route("/api/live", live_reload.endpoint))
     return routes + [
-        # Any other /api/ path is a JSON 404, not the index.html fallback.
+        # Any other /api/ path is a JSON 404, never the app page.
         Route("/api/{rest:path}", meta.unknown_api),
         # Catch-all static serving. Must stay last -- it matches every
         # remaining path, so anything added after this line never runs.

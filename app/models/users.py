@@ -82,8 +82,10 @@ class User:
     # path on *their* machine: the server must never execute it.
     matlab_path: str = ""
     # This person's own list on the Appearance screen; None follows the app's
-    # defaults. theme_id is the one they use. See app/models/themes.py.
+    # defaults; themes_builtins is which built-in themes it has seen. theme_id
+    # is the one they use. See app/models/themes.py.
     themes: list[dict[str, Any]] | None = None
+    themes_builtins: int = 0
     theme_id: str = ""
 
     @property
@@ -112,6 +114,7 @@ class User:
             "shortcuts": self.shortcuts,
             "matlab_path": self.matlab_path,
             "themes": self.themes,
+            "themes_builtins": self.themes_builtins,
             "theme_id": self.theme_id,
         }
 
@@ -134,6 +137,7 @@ class User:
             shortcuts=record.get("shortcuts") or {},
             matlab_path=record.get("matlab_path", ""),
             themes=record.get("themes"),
+            themes_builtins=record.get("themes_builtins", 0),
             theme_id=record.get("theme_id", ""),
         )
 

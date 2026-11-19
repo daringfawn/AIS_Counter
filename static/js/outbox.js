@@ -35,6 +35,8 @@ const Outbox = {
     this.tab = this.newId();
     this.save();
     this.adopt();
+    // A newer build waits to load until the edits are on the server (fresh.js).
+    Fresh.holdWhile( () => this.pending() );
     window.addEventListener( "online" , () => this.kick() );
     window.addEventListener( "storage" , ( e ) => { if ( e.key && e.key.startsWith( this.prefix() ) ) this.render(); } );
     document.addEventListener( "visibilitychange" , () => { if ( !document.hidden ) { this.adopt(); this.kick(); } } );
