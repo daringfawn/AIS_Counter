@@ -10,6 +10,9 @@ from starlette.routing import Route
 from app.tests.route_support import RoutesTestCase
 
 STREAMS = {"/api/owner/logs/stream"}  # never end; app/core/sse.py sets no-store itself
+# index.html at a Process or Batches deep link: the static rule, like "/"
+# (test_static_files_keep_their_own_rule).
+APP_PAGES = {"/ais/{rest:path}", "/batches/folder/{folder:int}"}
 
 
 class NoStoreTest(RoutesTestCase):
@@ -19,7 +22,7 @@ class NoStoreTest(RoutesTestCase):
         path."""
         checked = 0
         for route in self.app.routes:
-            if not isinstance(route, Route) or route.path in STREAMS:
+            if not isinstance(route, Route) or route.path in STREAMS | APP_PAGES:
                 continue
             path = re.sub(r"\{[^}]+\}", "1", route.path)
             for method in sorted((route.methods or set()) - {"HEAD", "OPTIONS"}):
@@ -36,6 +39,7 @@ class NoStoreTest(RoutesTestCase):
         self.assertIn("max-age=", self.client.get("/favicon.ico").headers["cache-control"])
         # index.html is revalidated, not refused: the browser may keep it, a
         # shared cache may not.
-        cache = self.client.get("/").headers["cache-control"]
-        self.assertIn("private", cache)
-        self.assertIn("no-cache", cache)
+        for path in ("/", "/ais/1-folder/image.tif", "/batches/folder/1"):
+            cache = self.client.get(path).headers["cache-control"]
+            self.assertIn("private", cache, path)
+            self.assertIn("no-cache", cache, path)

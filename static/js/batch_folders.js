@@ -4,7 +4,7 @@
 //
 // Two ways to show them, picked in Settings (Settings.batchesView):
 //   drill -- one folder at a time: a path back up, its folders as tiles, then
-//            its batches. The folder open is in the hash (#batches/folder/12),
+//            its batches. The folder open is in the path (/batches/folder/12),
 //            so Back, Forward, reload and a pasted link land there.
 //   tree  -- every folder a heading that opens and closes (remembered in this
 //            browser), its folders and batches under it.
@@ -84,15 +84,20 @@ const BatchFolders = {
     return out;
   },
 
-  // The folder the drill view has open (null: the top), from the hash.
+  // The folder the drill view has open (null: the top), from the path
+  // (/batches/folder/<id>).
   current() {
-    const parts = window.location.hash.replace( /^#/ , "" ).split( "/" );
-    const id = parts[ 1 ] === "folder" ? Number( parts[ 2 ] ) : NaN;
+    const parts = window.location.pathname.split( "/" );
+    const id = parts[ 1 ] === "batches" && parts[ 2 ] === "folder" ? Number( parts[ 3 ] ) : NaN;
     return this.byId.has( id ) ? id : null;
   },
 
+  urlFor( id ) {
+    return id == null ? "/batches" : "/batches/folder/" + id;
+  },
+
   go( id ) {
-    window.location.hash = id == null ? "#batches" : "#batches/folder/" + id;
+    Nav.go( this.urlFor( id ) );
   },
 
   // Where something new goes: the folder open, in the drill view.
@@ -197,7 +202,7 @@ const BatchFolders = {
         const item = Dom.el( "li" , { class: "breadcrumb-item" + ( last ? " active" : "" ) ,
           attrs: last ? { "aria-current": "page" } : {} , children: [
             last ? Dom.el( "span" , { class: "fw-semibold" , text: step.name } )
-              : Dom.el( "a" , { text: step.name , attrs: { href: step.id == null ? "#batches" : "#batches/folder/" + step.id } } ),
+              : Dom.el( "a" , { text: step.name , attrs: { href: this.urlFor( step.id ) } } ),
           ] } );
         if ( !last ) this.dropTarget( item , step.id );
         return item;
@@ -218,7 +223,7 @@ const BatchFolders = {
     bar.firstChild.style.width = share + "%";
     const tile = Dom.el( "div" , { class: "card batches-tile" , children: [ Dom.el( "div" , { class: "card-body" , children: [
       Dom.el( "div" , { class: "d-flex align-items-center gap-2 min-w-0" , children: [
-        Dom.el( "a" , { class: "stretched-link text-truncate fw-semibold batches-tile-name me-auto" , attrs: { href: "#batches/folder/" + f.id } ,
+        Dom.el( "a" , { class: "stretched-link text-truncate fw-semibold batches-tile-name me-auto" , attrs: { href: this.urlFor( f.id ) } ,
           children: [ Dom.el( "i" , { class: "bi bi-folder-fill me-2 text-warning" } ) , Dom.el( "span" , { text: f.name } ) ] } ),
         ...( Batches.admin() ? [ this.compareButton( f.id , true ) , this.menu( f ) ] : [] ),
       ] } ),

@@ -66,7 +66,7 @@ const Shortcuts = {
     // Ahead of every other key handler, so the key being bound does nothing else.
     window.addEventListener( "keydown" , ( e ) => this.onCapture( e ) , true );
     window.addEventListener( "click" , () => this.cancel() , true );
-    window.addEventListener( "hashchange" , () => this.cancel() );
+    window.addEventListener( "nav" , () => this.cancel() );
     this.render();
     this.refreshText();
   },

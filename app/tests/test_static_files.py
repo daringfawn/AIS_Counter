@@ -92,6 +92,38 @@ class ScreenPathTest(unittest.TestCase):
             self.assertEqual(client.get("/admin/users").status_code, 404)
 
 
+class DeepScreenPathTest(unittest.TestCase):
+    def test_paths_under_process_and_batches_get_the_page(self) -> None:
+        """/ais/<id>-<folder>/<image> and /batches/folder/<id> are the app
+        page (serve_app_page), like /ais and /batches themselves; a folder
+        that is not a number, or anything else, is still a 404."""
+        from starlette.applications import Starlette
+        from starlette.routing import Route
+        from starlette.testclient import TestClient
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "index.html").write_text(
+                '<section class="view" data-view="ais" data-path="/ais" data-subpaths>'
+                '<section class="view" data-view="batches" data-path="/batches" data-subpaths>'
+                '<section class="view" data-view="users" data-path="/admin/users">'
+            )
+            server = StaticServer(root)
+            client = TestClient(Starlette(routes=[
+                Route("/ais/{rest:path}", server.serve_app_page),
+                Route("/batches/folder/{folder:int}", server.serve_app_page),
+                Route("/{path:path}", server.endpoint),
+            ]))
+            for path in ("/ais", "/ais/3-My%20folder/a%2Fb.tif", "/ais/3-x", "/batches", "/batches/folder/7", "/admin/users"):
+                with self.subTest(path=path):
+                    response = client.get(path)
+                    self.assertEqual(response.status_code, 200)
+                    self.assertIn("data-view", response.text)
+            for path in ("/batches/folder/x", "/batches/other", "/nope"):
+                with self.subTest(path=path):
+                    self.assertEqual(client.get(path).status_code, 404)
+
+
 class StaticDirTest(unittest.TestCase):
     def test_static_dir_may_not_serve_secrets(self) -> None:
         """S2: everything in static_dir is served without signing in, so the

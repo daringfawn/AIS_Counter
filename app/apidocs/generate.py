@@ -18,7 +18,11 @@ CONFIG = assets.CODE_ROOT / "config"
 
 # What the route table has that is not an API: the pages a link opens, and the
 # catch-alls.
-NOT_DOCUMENTED = {"/login/{credential:path}", "/join/{credential:path}", "/docs/{page:path}", "/api/{rest:path}", "/{path:path}"}
+NOT_DOCUMENTED = {
+    "/login/{credential:path}", "/join/{credential:path}", "/docs/{page:path}",
+    "/ais/{rest:path}", "/batches/folder/{folder:int}",
+    "/api/{rest:path}", "/{path:path}",
+}
 
 
 def documented_routes(routes: list[Any]) -> list[tuple[str, str, Any]]:

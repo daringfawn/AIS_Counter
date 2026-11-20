@@ -70,8 +70,8 @@ const Batches = {
     } );
     // A poll does not redraw under an open menu; it catches up once it closes.
     Dom.get( "batches-list" ).addEventListener( "hidden.bs.dropdown" , () => this.render() );
-    // Another folder opened (#batches/folder/<id>) draws at once, then polls.
-    window.addEventListener( "hashchange" , () => { if ( this.showing() ) this.render(); this.onView(); } );
+    // Another folder opened (/batches/folder/<id>) draws at once, then polls.
+    window.addEventListener( "nav" , () => { if ( this.showing() ) this.render(); this.onView(); } );
     document.addEventListener( "visibilitychange" , () => this.onView() );
     this.initReset();
     Channels.init();

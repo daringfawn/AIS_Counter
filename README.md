@@ -90,7 +90,7 @@ the start of an AIS gives the original's trace and length. **Enter** accepts,
 - **Batches, shared.** Each opened folder is a batch on the server
   (`app/models/ais.py`): its images, done marks and accepted AIS are shared
   by every signed-in user. The URL follows along
-  (`#ais/<id>-<folder>/<image>`), so a link opens the same image, with its
+  (`/ais/<id>-<folder>/<image>`), so a link opens the same image, with its
   traces, for anyone; **Batches** lists them all. A browser-picked folder is
   hashed first (sha-256) and uploads in the background; files live once, by
   content, in `<app dir>/storage/ais/files/`.

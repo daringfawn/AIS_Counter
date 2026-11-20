@@ -206,7 +206,7 @@ const AisImages = {
       Ais.excludedChanged( now , showIndex != null ? showIndex : null );
     } else {
       if ( batch ) Ais.batchChanged( batch , false );
-      if ( showIndex != null ) window.location.hash = Ais.urlFor( ctx.batch , ctx.entries[ showIndex ] );
+      if ( showIndex != null ) Nav.go( Ais.urlFor( ctx.batch , ctx.entries[ showIndex ] ) );
     }
     if ( batch && Batches.showing() ) Batches.refresh( true );
   },

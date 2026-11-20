@@ -8,8 +8,9 @@
 //
 // The Instructions screen is markup only; its contents links scroll the same way.
 //
-// In-page links (#about-measures, the report's own #1-summary contents) scroll
-// instead of changing the URL hash, which Nav reads as the screen to show.
+// The contents links at the top of About and Instructions are card paths
+// (/about/measures), which Nav opens and scrolls to. The report's own
+// #1-summary contents scroll here instead, without touching the URL.
 const About = {
   loaded: false,
 
@@ -17,7 +18,7 @@ const About = {
     this.facts( me );
     Dom.get( "about" ).addEventListener( "click" , ( e ) => this.onLink( e ) );
     Dom.get( "instructions" ).addEventListener( "click" , ( e ) => this.onLink( e ) );
-    window.addEventListener( "hashchange" , () => this.maybeLoad() );
+    window.addEventListener( "nav" , () => this.maybeLoad() );
     this.maybeLoad();
   },
 
@@ -48,7 +49,7 @@ const About = {
   },
 
   maybeLoad() {
-    if ( this.loaded || window.location.hash.replace( /^#/ , "" ).split( "/" )[ 0 ] !== "about" ) return;
+    if ( this.loaded || Nav.current() !== "about" ) return;
     this.loaded = true;
     this.load();
   },

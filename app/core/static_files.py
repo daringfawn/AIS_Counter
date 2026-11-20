@@ -214,6 +214,16 @@ class StaticServer:
         response.headers["x-robots-tag"] = "noindex"
         return response
 
+    async def serve_app_page(self, request: Request) -> Response:
+        """index.html, for a path under a screen that reads the rest of the
+        path itself: the Process screen's /ais/<id>-<folder>/<image> and the
+        Batches screen's /batches/folder/<id> (data-subpaths in index.html,
+        static/js/nav.js). Cached like index.html at its own path."""
+        path = self.resolve(self.index_file)
+        if path is None or not path.is_file():
+            return _not_found(request)
+        return await self._send(request, path)
+
     async def serve_login_page(self, request: Request) -> Response:
         """A login link (or an invite link) opens the ordinary app page,
         which sees the /login/ (or /join/) path and asks the person to confirm

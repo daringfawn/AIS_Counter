@@ -5,7 +5,7 @@
 // The analysis is all server-side (app/analysis/). Each opened folder becomes
 // a batch on the server (app/models/ais.py), shared with every signed-in
 // user: its images, which are done, and the accepted AIS. The URL names the
-// batch and image (#ais/<id>-<folder>/<image>), so a link opens the same
+// batch and image (/ais/<id>-<folder>/<image>), so a link opens the same
 // image for anyone. ais_images.js holds the Images, Open path and Batches
 // dialogs, ais_export.js the CSV and ZIP exports, ais_auto.js auto mode.
 //
@@ -33,7 +33,7 @@ const Ais = {
   direction: 1,          // the way the arrow keys last stepped, which preload looks first
   legacyResultsKey: "ais-results",
   viewKey: "ais-view",
-  lastKey: "ais-last",   // the last batch and image, for a bare #ais or /
+  lastKey: "ais-last",   // the last batch and image, for a bare /ais or /
   focusKey: "ais-focus",
   layersKey: "ais-layers-hidden",   // overlays switched off under Appearance
   noteKey: "ais-note-hidden",   // the batch whose single-image note was closed
@@ -47,7 +47,7 @@ const Ais = {
   images: [],
   batch: null,           // the server's batch record
   openFresh: null,       // a batch id the Batches screen just created: opens with the Images dialog
-  following: null,       // the hash followUrl is opening
+  following: null,       // the path followUrl is opening
   me: null,
   local: { enabled: false , platform: "" , matlab: false },
   index: -1,
@@ -190,8 +190,9 @@ const Ais = {
     [ Dom.get( "ais-current" ) , document.querySelector( ".ais-toolbar" ) ]
       .forEach( ( element ) => around.observe( element ) );
     window.addEventListener( "resize" , () => this.fitStage() );
-    window.addEventListener( "hashchange" , () => this.followUrl() );
-    window.addEventListener( "popstate" , () => this.followUrl() );
+    // Nav sends "nav" for every change of screen and every Back or Forward,
+    // including between images, which only change the rest of the path.
+    window.addEventListener( "nav" , () => this.followUrl() );
     AisImages.init();
     AisAssign.init();
     AisExport.init();
@@ -252,17 +253,17 @@ const Ais = {
     }
   },
 
-  // --- the URL: #ais/<batch id>-<folder>/<image key> --------------------------
+  // --- the URL: /ais/<batch id>-<folder>/<image key> --------------------------
 
   urlFor( batch , entry ) {
-    let hash = "#ais";
-    if ( batch ) hash += "/" + batch.id + "-" + encodeURIComponent( batch.name );
-    if ( batch && entry ) hash += "/" + encodeURIComponent( entry.key );
-    return hash;
+    let path = "/ais";
+    if ( batch ) path += "/" + batch.id + "-" + encodeURIComponent( batch.name );
+    if ( batch && entry ) path += "/" + encodeURIComponent( entry.key );
+    return path;
   },
 
   parseUrl() {
-    const parts = window.location.hash.replace( /^#/ , "" ).split( "/" );
+    const parts = window.location.pathname.replace( /^\// , "" ).split( "/" );
     if ( parts[ 0 ] !== "ais" || !parts[ 1 ] ) return null;
     const id = parseInt( parts[ 1 ] , 10 );
     if ( !( id > 0 ) ) return null;
@@ -276,28 +277,28 @@ const Ais = {
   },
 
   setUrl( push ) {
-    const hash = this.urlFor( this.batch , this.images[ this.index ] );
+    const path = this.urlFor( this.batch , this.images[ this.index ] );
     if ( this.batch ) {
       try {
-        window.localStorage.setItem( this.lastKey , hash );
+        window.localStorage.setItem( this.lastKey , path );
       } catch ( error ) { /* storage blocked: a reload keeps only the URL */ }
     }
-    if ( window.location.hash === hash ) return;
-    if ( push ) window.history.pushState( null , "" , hash );
-    else window.history.replaceState( null , "" , hash );
+    if ( window.location.pathname === path ) return;
+    if ( push ) window.history.pushState( null , "" , path );
+    else window.history.replaceState( null , "" , path );
   },
 
   // A pasted link, back / forward, or the first load: open what the URL names.
-  // A bare #ais (or /) goes back to the open batch, or the last one seen.
-  // One hash change fires both hashchange and popstate: followed once.
+  // A bare /ais (or /) goes back to the open batch, or the last one seen.
+  // The same path asked for again while it is still opening is followed once.
   async followUrl() {
-    const hash = window.location.hash;
-    if ( this.following === hash ) return;
-    this.following = hash;
+    const path = window.location.pathname;
+    if ( this.following === path ) return;
+    this.following = path;
     try {
       await this.followUrlNow();
     } finally {
-      if ( this.following === hash ) this.following = null;
+      if ( this.following === path ) this.following = null;
     }
   },
 
@@ -318,6 +319,8 @@ const Ais = {
         last = window.localStorage.getItem( this.lastKey );
       } catch ( error ) { /* storage blocked */ }
       if ( !last ) return;
+      // Saved before screens were paths: #ais/3-folder/image.
+      if ( last.charAt( 0 ) === "#" ) last = "/" + last.slice( 1 );
       window.history.replaceState( null , "" , last );
       want = this.parseUrl();
       if ( !want ) return;
@@ -358,7 +361,7 @@ const Ais = {
     try {
       window.localStorage.removeItem( this.lastKey );
     } catch ( error ) { /* storage blocked */ }
-    window.history.replaceState( null , "" , "#ais" );
+    window.history.replaceState( null , "" , "/ais" );
   },
 
   // --- opening a batch -----------------------------------------------------

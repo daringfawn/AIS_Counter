@@ -18,7 +18,7 @@ class ErrorPageCase(RoutesTestCase):
 
 class NotFoundTests(ErrorPageCase):
     def test_a_browser_gets_the_page(self) -> None:
-        for path in ["/settings", "/nope.css", "/a/b/"]:
+        for path in ["/admin", "/nope.css", "/a/b/"]:
             response = self.fetch(path, BROWSER)
             self.assertEqual(response.status_code, 404, path)
             self.assertTrue(response.headers["content-type"].startswith("text/html"), path)

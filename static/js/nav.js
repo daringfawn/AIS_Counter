@@ -1,24 +1,37 @@
 // The sidebar: which signed-in screen is showing.
 //
-// Every screen is a <section class="view" data-view="name"> in index.html and
-// a sidebar link to #name. The URL hash is the only state -- back, forward,
-// reload and a pasted link all land on the same screen, with no router.
+// Every screen is a <section class="view" data-view="name" data-path="/area/name">
+// in index.html, and a sidebar link to that path. The URL's path is the only
+// state -- back, forward, reload and a pasted link all land on the same
+// screen. The server serves index.html for exactly the paths index.html
+// declares (static_files.py reads them), so a reload works and any other path
+// is still a real 404.
 //
-// A hash can also name a card on a screen (#two-factor-panel), or one of the
-// screens that became a card on Account (#two-factor, see moved): that opens
-// the screen it is on and scrolls to it, so old links and bookmarks still work.
+// A screen marked data-subpaths also owns every path under its own: the
+// Process screen's /ais/<id>-<folder>/<image> and the Batches screen's
+// /batches/folder/<id>. The screen reads the rest itself (ais.js,
+// batch_folders.js), and the server has a route for each (routes/__init__.py).
+//
+// A card can have a path too (/account/two-factor, /about/measures): that
+// opens the screen it is on and scrolls to it. Links from before screens had
+// paths (#users, #two-factor, #ais/3-folder/image) are turned into their path
+// on load, so old bookmarks work.
 //
 // Whether a screen exists for this user is not decided here. The screen's own
 // file un-hides its section (Keys.init shows the All API keys screen, and only
 // if the server has them switched on); Nav only offers what was un-hidden. So
 // app.js calls Nav.init() last, once every screen has had its say.
+//
+// After every change of screen, and every Back or Forward, Nav sends a "nav"
+// event on window, which is how a screen hears it was opened or that its part
+// of the path changed.
 const Nav = {
   fallback: "ais",
   // Matches Bootstrap's lg breakpoint, where offcanvas-lg becomes a column.
   wide: window.matchMedia( "(min-width: 992px)" ),
   // Collapsed-or-not is a per-browser convenience, like the theme.
   storageKey: "sidebar-collapsed",
-  // Screens that are now cards on Account: old hash -> the card's id.
+  // Old hash links to screens that are now cards on Account: hash -> card id.
   moved: {
     "password": "password-panel",
     "pin": "pin-panel",
@@ -42,20 +55,41 @@ const Nav = {
     toggle.addEventListener( "click" , () => this.toggleSidebar() );
     Dom.show( toggle , true );
 
+    // Any link to a screen's or card's path changes screen without a page
+    // load: the sidebar, links inside screens, a Batches folder tile.
+    document.addEventListener( "click" , ( event ) => this.follow( event ) );
     // Moving between screens is not an undo step: Back and Forward already
     // are that, and an undo that only changed the screen would get in the way
     // of undoing what was done on it.
     // With a newer build waiting, the switch is a page load instead (fresh.js).
-    window.addEventListener( "hashchange" , () => {
+    window.addEventListener( "popstate" , () => {
       if ( !Fresh.swap() ) this.render();
     } );
+    this.adoptHash();
     this.render();
+  },
+
+  // A plain click on a link to a path this page shows. A new tab, a
+  // download, or a path that is not a screen here is left to the browser.
+  follow( event ) {
+    if ( event.defaultPrevented || event.button !== 0 ) return;
+    if ( event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ) return;
+    const link = event.target.closest ? event.target.closest( "a[href^='/']" ) : null;
+    if ( !link || link.target || link.hasAttribute( "download" ) ) return;
+    const path = this.clean( link.getAttribute( "href" ) );
+    if ( !this.find( path ) ) return;
+    event.preventDefault();
+    this.go( path );
   },
 
   // Undo uses this to go back to the screen an action happened on.
   show( name ) {
-    window.location.hash = "#" + name;
-    this.render();
+    this.go( this.pathOf( name ) );
+  },
+
+  go( path ) {
+    if ( path !== this.clean( window.location.pathname ) ) window.history.pushState( null , "" , path );
+    if ( !Fresh.swap() ) this.render();
   },
 
   available( name ) {
@@ -63,28 +97,58 @@ const Nav = {
     return Boolean( view ) && !view.hidden;
   },
 
-  // A hash naming a screen this user does not have (an admin link opened by a
-  // non-admin, a typo) shows the account screen rather than nothing.
-  current() {
-    // Only the first segment names the screen: #ais/3-folder/image is #ais.
-    const name = window.location.hash.replace( /^#/ , "" ).split( "/" )[ 0 ];
-    if ( this.available( name ) ) return name;
-    const card = this.card( name );
-    return card ? card.closest( ".view" ).getAttribute( "data-view" ) : this.fallback;
+  pathOf( name ) {
+    const view = document.querySelector( '.view[data-view="' + name + '"]' );
+    return view ? view.getAttribute( "data-path" ) : "/";
   },
 
-  // The card a hash names, when it sits on a screen this user has and is
-  // itself showing. null for a screen's own name, or anything else.
-  card( name ) {
-    const id = Object.prototype.hasOwnProperty.call( this.moved , name ) ? this.moved[ name ] : name;
-    const card = id ? document.getElementById( id ) : null;
-    const view = card && card.closest( ".view" );
-    if ( !view || view === card || card.hidden ) return null;
-    return this.available( view.getAttribute( "data-view" ) ) ? card : null;
+  // "/admin/users/" and "/admin/users" are the same screen.
+  clean( path ) {
+    return path.replace( /[?#].*$/ , "" ).replace( /\/+$/ , "" ) || "/";
+  },
+
+  // The screen (and card, if the path names one) a path opens, when this user
+  // has that screen and the card is showing. null for anything else. A path
+  // under a data-subpaths screen's own opens that screen.
+  find( path ) {
+    let node = Dom.all( "[data-path]" ).find( ( each ) => each.getAttribute( "data-path" ) === path );
+    if ( !node ) {
+      node = Dom.all( ".view[data-subpaths]" ).find( ( view ) => path.startsWith( view.getAttribute( "data-path" ) + "/" ) );
+    }
+    const view = node && node.closest( ".view" );
+    if ( !view || !this.available( view.getAttribute( "data-view" ) ) ) return null;
+    if ( node !== view && node.hidden ) return null;
+    return { name: view.getAttribute( "data-view" ) , card: node === view ? null : node };
+  },
+
+  // A path naming a screen this user does not have (an admin link opened by a
+  // non-admin, a typo, or just "/") shows the Process screen rather than nothing.
+  current() {
+    const found = this.find( this.clean( window.location.pathname ) );
+    return found ? found.name : this.fallback;
+  },
+
+  // A link from before screens had paths: #users, #two-factor,
+  // #two-factor-panel, #ais/3-folder/image, #batches/folder/12. Swapped for
+  // the path, in place, so Back does not return to it.
+  adoptHash() {
+    const old = window.location.hash.replace( /^#/ , "" );
+    if ( old === "" ) return;
+    const first = old.split( "/" )[ 0 ];
+    const rest = old.slice( first.length );
+    const id = Object.prototype.hasOwnProperty.call( this.moved , first ) ? this.moved[ first ] : first;
+    const view = document.querySelector( '.view[data-view="' + CSS.escape( first ) + '"]' );
+    const node = view || document.getElementById( id );
+    let path = node && node.getAttribute( "data-path" );
+    if ( path && rest !== "" ) path = view && view.hasAttribute( "data-subpaths" ) ? path + rest : null;
+    if ( path ) window.history.replaceState( null , "" , path );
   },
 
   render() {
-    const name = this.current();
+    const found = this.find( this.clean( window.location.pathname ) );
+    const name = found ? found.name : this.fallback;
+    // The address bar says where they are, also after "/" or an unknown path.
+    if ( !found ) window.history.replaceState( null , "" , this.pathOf( name ) );
     Track.nav( name );
     Dom.all( ".view" ).forEach( function ( view ) {
       view.classList.toggle( "view-active" , view.getAttribute( "data-view" ) === name );
@@ -95,13 +159,13 @@ const Nav = {
       if ( active ) link.setAttribute( "aria-current" , "page" );
       else link.removeAttribute( "aria-current" );
     } );
-    const card = this.card( window.location.hash.replace( /^#/ , "" ) );
-    if ( card ) Dom.reveal( card , "start" );
+    if ( found && found.card ) Dom.reveal( found.card , "start" );
     else {
       Dom.movedOnPurpose();
       window.scrollTo( 0 , 0 );
     }
     this.announce( name );
+    window.dispatchEvent( new CustomEvent( "nav" , { detail: { screen: name } } ) );
   },
 
   // Changing screen reloads nothing, so nothing tells a screen reader or the
@@ -161,36 +225,8 @@ const Nav = {
     }
   },
 
-  // The menu button: on a wide screen it folds the sidebar column away and
-  // back; on a phone it slides the panel in and out.
-  toggleSidebar() {
-    if ( this.wide.matches ) {
-      const collapsed = !document.documentElement.classList.contains( "sidebar-collapsed" );
-      this.setCollapsed( collapsed );
-      try {
-        if ( collapsed ) window.localStorage.setItem( this.storageKey , "1" );
-        else window.localStorage.removeItem( this.storageKey );
-      } catch ( error ) { /* storage blocked: it just is not remembered */ }
-    } else if ( window.bootstrap ) {
-      bootstrap.Offcanvas.getOrCreateInstance( Dom.get( "sidebar" ) ).toggle();
-    }
-  },
-
-  setCollapsed( collapsed ) {
-    document.documentElement.classList.toggle( "sidebar-collapsed" , collapsed );
-    Dom.get( "sidebar-toggle" ).setAttribute( "aria-expanded" , String( !collapsed ) );
-  },
-
-  savedCollapsed() {
-    try {
-      return window.localStorage.getItem( this.storageKey ) === "1";
-    } catch ( error ) {
-      return false;
-    }
-  },
-
   // On a phone the sidebar is a slide-in panel; picking a screen closes it,
-  // including the one already showing (which changes no hash).
+  // including the one already showing.
   closeSidebar() {
     const panel = window.bootstrap && bootstrap.Offcanvas.getInstance( Dom.get( "sidebar" ) );
     if ( panel ) panel.hide();

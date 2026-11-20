@@ -290,6 +290,11 @@ def build_routes(
         Route("/join/{credential:path}", static_server.serve_join_page),
         # The readable API and MCP references (app/routes/api_docs_md.py).
         Route("/docs/{page:path}", static_server.serve_docs_page),
+        # The two screens with more after their own path (data-subpaths in
+        # index.html): the image open on Process, the folder open on Batches.
+        # /ais and /batches themselves are plain screen paths (static_files.py).
+        Route("/ais/{rest:path}", static_server.serve_app_page),
+        Route("/batches/folder/{folder:int}", static_server.serve_app_page),
     ]
     for declared in declared_routes():
         middleware = [Middleware(guard) for guard in declared.guards]

@@ -59,24 +59,24 @@
       </div>
       <div class="offcanvas-body">
         <nav id="sidebar-nav" class="nav nav-pills flex-column w-100 gap-1" data-i18n-attr="aria-label:nav.sidebar_label">
-          <a class="nav-link" href="#ais" data-nav="ais"><i class="bi bi-bezier2" aria-hidden="true"></i><span data-i18n="nav.ais"></span></a>
-          <a class="nav-link" href="#batches" data-nav="batches"><i class="bi bi-collection" aria-hidden="true"></i><span data-i18n="nav.batches"></span></a>
-          <a class="nav-link" href="#settings" data-nav="settings"><i class="bi bi-sliders" aria-hidden="true"></i><span data-i18n="nav.settings"></span></a>
-          <a class="nav-link" href="#shortcuts" data-nav="shortcuts"><i class="bi bi-keyboard" aria-hidden="true"></i><span data-i18n="nav.shortcuts"></span></a>
-          <a class="nav-link" href="#instructions" data-nav="instructions"><i class="bi bi-question-circle" aria-hidden="true"></i><span data-i18n="nav.instructions"></span></a>
-          <a class="nav-link" href="#about" data-nav="about"><i class="bi bi-info-circle" aria-hidden="true"></i><span data-i18n="nav.about"></span></a>
+          <a class="nav-link" href="/ais" data-nav="ais"><i class="bi bi-bezier2" aria-hidden="true"></i><span data-i18n="nav.ais"></span></a>
+          <a class="nav-link" href="/batches" data-nav="batches"><i class="bi bi-collection" aria-hidden="true"></i><span data-i18n="nav.batches"></span></a>
+          <a class="nav-link" href="/settings" data-nav="settings"><i class="bi bi-sliders" aria-hidden="true"></i><span data-i18n="nav.settings"></span></a>
+          <a class="nav-link" href="/shortcuts" data-nav="shortcuts"><i class="bi bi-keyboard" aria-hidden="true"></i><span data-i18n="nav.shortcuts"></span></a>
+          <a class="nav-link" href="/instructions" data-nav="instructions"><i class="bi bi-question-circle" aria-hidden="true"></i><span data-i18n="nav.instructions"></span></a>
+          <a class="nav-link" href="/about" data-nav="about"><i class="bi bi-info-circle" aria-hidden="true"></i><span data-i18n="nav.about"></span></a>
           <!-- Account: its second line names who is signed in (App.labelAccount). -->
-          <a class="nav-link" href="#account" data-nav="account"><i class="bi bi-person-circle" aria-hidden="true"></i><span class="nav-link-text"><span data-i18n="nav.account"></span><span id="sidebar-user" class="nav-link-sub"></span></span></a>
-          <a class="nav-link" href="#appearance" data-nav="appearance"><i class="bi bi-palette" aria-hidden="true"></i><span data-i18n="nav.appearance"></span></a>
+          <a class="nav-link" href="/account" data-nav="account"><i class="bi bi-person-circle" aria-hidden="true"></i><span class="nav-link-text"><span data-i18n="nav.account"></span><span id="sidebar-user" class="nav-link-sub"></span></span></a>
+          <a class="nav-link" href="/appearance" data-nav="appearance"><i class="bi bi-palette" aria-hidden="true"></i><span data-i18n="nav.appearance"></span></a>
 
           <div id="sidebar-admin" class="sidebar-group" hidden>
             <h3 class="sidebar-heading" data-i18n="nav.admin_heading"></h3>
-            <a class="nav-link" href="#users" data-nav="users"><i class="bi bi-people" aria-hidden="true"></i><span data-i18n="nav.users"></span></a>
-            <a class="nav-link" href="#invite-links" data-nav="invite-links"><i class="bi bi-link-45deg" aria-hidden="true"></i><span data-i18n="nav.invite_links"></span></a>
-            <a class="nav-link" href="#all-keys" data-nav="all-keys"><i class="bi bi-shield-lock" aria-hidden="true"></i><span data-i18n="nav.all_keys"></span></a>
-            <a class="nav-link" href="#logs" data-nav="logs"><i class="bi bi-journal-text" aria-hidden="true"></i><span data-i18n="nav.logs"></span></a>
-            <a class="nav-link" href="#jobs" data-nav="jobs"><i class="bi bi-clock-history" aria-hidden="true"></i><span data-i18n="nav.jobs"></span></a>
-            <a class="nav-link" href="#server-settings" data-nav="server-settings"><i class="bi bi-gear" aria-hidden="true"></i><span data-i18n="nav.server_settings"></span></a>
+            <a class="nav-link" href="/admin/users" data-nav="users"><i class="bi bi-people" aria-hidden="true"></i><span data-i18n="nav.users"></span></a>
+            <a class="nav-link" href="/admin/invite-links" data-nav="invite-links"><i class="bi bi-link-45deg" aria-hidden="true"></i><span data-i18n="nav.invite_links"></span></a>
+            <a class="nav-link" href="/admin/api-keys" data-nav="all-keys"><i class="bi bi-shield-lock" aria-hidden="true"></i><span data-i18n="nav.all_keys"></span></a>
+            <a class="nav-link" href="/admin/logs" data-nav="logs"><i class="bi bi-journal-text" aria-hidden="true"></i><span data-i18n="nav.logs"></span></a>
+            <a class="nav-link" href="/admin/jobs" data-nav="jobs"><i class="bi bi-clock-history" aria-hidden="true"></i><span data-i18n="nav.jobs"></span></a>
+            <a class="nav-link" href="/admin/settings" data-nav="server-settings"><i class="bi bi-gear" aria-hidden="true"></i><span data-i18n="nav.server_settings"></span></a>
           </div>
           <p id="sidebar-version" class="sidebar-version" hidden></p>
         </nav>
@@ -212,10 +212,10 @@
       <section id="signed-in" hidden>
         <!-- Process: the ais_auto.m port. Everything here is driven by
              static/js/ais.js; the analysis runs on the server. -->
-        <section class="view ais-view" data-view="ais" id="ais-panel">
+        <section class="view ais-view" data-view="ais" data-path="/ais" data-subpaths id="ais-panel">
           <div class="card mb-3">
             <div class="card-body ais-toolbar">
-              <a id="ais-batches-open" class="btn btn-outline-secondary ais-focus-hide" href="#batches">
+              <a id="ais-batches-open" class="btn btn-outline-secondary ais-focus-hide" href="/batches">
                 <i class="bi bi-collection" aria-hidden="true"></i> <span data-i18n="ais.batches"></span>
               </a>
               <button id="ais-images-open" class="btn btn-outline-secondary ais-focus-hide" type="button" disabled>
@@ -560,7 +560,7 @@
         <!-- Batches: every batch, shared by all signed-in users (app/models/ais.py),
              with its uploads, progress and auto runs, refreshed while showing.
              Driven by static/js/batches.js. -->
-        <section class="view" data-view="batches" id="batches-panel">
+        <section class="view" data-view="batches" data-path="/batches" data-subpaths id="batches-panel">
           <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
             <h2 class="h4 mb-0 me-auto" data-i18n="batches.heading"></h2>
             <div class="form-check form-switch mb-0 small">
@@ -1072,7 +1072,7 @@
             </div>
           </div>
 
-        <section class="view" data-view="account" id="account-panel">
+        <section class="view" data-view="account" data-path="/account" id="account-panel">
           <h2 class="view-title" data-i18n="account.heading"></h2>
 
 
@@ -1156,7 +1156,7 @@
           </section>
 
           <!-- Only while the owner has auth.passwords on; see password.js. -->
-          <section class="card" id="password-panel" hidden>
+          <section class="card" id="password-panel" data-path="/account/password" hidden>
             <div class="card-body">
               <h3 class="card-title" data-i18n="password.heading"></h3>
               <p class="text-body-secondary" data-i18n="password.description"></p>
@@ -1190,7 +1190,7 @@
           </section>
 
           <!-- Only for non-admin accounts; see pin.js. -->
-          <section class="card" id="pin-panel" hidden>
+          <section class="card" id="pin-panel" data-path="/account/pin" hidden>
             <div class="card-body">
               <h3 class="card-title" data-i18n="pin.heading"></h3>
               <p class="text-body-secondary" data-i18n="pin.description"></p>
@@ -1210,7 +1210,7 @@
           </section>
 
           <!-- Only while the owner has auth.two_factor on; see two_factor.js. -->
-          <section class="card" id="two-factor-panel" hidden>
+          <section class="card" id="two-factor-panel" data-path="/account/two-factor" hidden>
             <div class="card-body">
               <h3 class="card-title" data-i18n="two_factor.heading"></h3>
               <p class="text-body-secondary" data-i18n="two_factor.description"></p>
@@ -1259,7 +1259,7 @@
             select is revealed only for an admin (see keys.js) because a key can
             never carry more permission than the account that owns it.
           -->
-          <section class="card" id="api-keys-panel" hidden>
+          <section class="card" id="api-keys-panel" data-path="/account/api-keys" hidden>
             <div class="card-body">
               <h3 class="card-title" data-i18n="api_keys.heading"></h3>
               <p class="text-body-secondary" data-i18n="api_keys.description"></p>
@@ -1440,7 +1440,7 @@
         <!-- How Process calculates: the method, then that method's own
              settings (one fieldset per method, data-method = its key). Kept
              in this browser; see settings.js. -->
-        <section class="view" data-view="settings" id="settings">
+        <section class="view" data-view="settings" data-path="/settings" id="settings">
           <h2 class="view-title" data-i18n="settings.heading"></h2>
           <p class="view-description" data-i18n="settings.description"></p>
           <section class="card">
@@ -1753,7 +1753,7 @@
 
         <!-- Every keyboard shortcut, rebindable; kept on the account. Filled
              by shortcuts.js. -->
-        <section class="view" data-view="shortcuts" id="shortcuts">
+        <section class="view" data-view="shortcuts" data-path="/shortcuts" id="shortcuts">
           <h2 class="view-title" data-i18n="shortcuts.heading"></h2>
           <p class="view-description" data-i18n="shortcuts.description"></p>
           <section class="card">
@@ -1772,21 +1772,21 @@
         <!-- How to use the Process screen: every how-to that used to sit under
              the image or in the Measure / Auto panels. Text in language.yaml
              (instructions.*), with {key:...} so it follows rebound keys. -->
-        <section class="view" data-view="instructions" id="instructions">
+        <section class="view" data-view="instructions" data-path="/instructions" id="instructions">
           <h2 class="view-title" data-i18n="instructions.heading"></h2>
           <p class="view-description" data-i18n="instructions.description"></p>
           <section class="card">
             <div class="card-body about">
               <nav class="about-toc">
-                <a href="#instructions-tracing" data-i18n="instructions.tracing_heading"></a>
-                <a href="#instructions-tools" data-i18n="instructions.tools_heading"></a>
-                <a href="#instructions-measure" data-i18n="instructions.measure_heading"></a>
-                <a href="#instructions-auto" data-i18n="instructions.auto_heading"></a>
-                <a href="#instructions-legend" data-i18n="about.legend_heading"></a>
-                <a href="#instructions-keys" data-i18n="about.keys_heading"></a>
+                <a href="/instructions/tracing" data-i18n="instructions.tracing_heading"></a>
+                <a href="/instructions/tools" data-i18n="instructions.tools_heading"></a>
+                <a href="/instructions/measure" data-i18n="instructions.measure_heading"></a>
+                <a href="/instructions/auto" data-i18n="instructions.auto_heading"></a>
+                <a href="/instructions/legend" data-i18n="about.legend_heading"></a>
+                <a href="/instructions/keys" data-i18n="about.keys_heading"></a>
               </nav>
 
-              <h3 class="h5" id="instructions-tracing" data-i18n="instructions.tracing_heading"></h3>
+              <h3 class="h5" id="instructions-tracing" data-path="/instructions/tracing" data-i18n="instructions.tracing_heading"></h3>
               <ul>
                   <li data-i18n="instructions.tracing_click"></li>
                   <li data-i18n="instructions.tracing_walk"></li>
@@ -1796,7 +1796,7 @@
                   <li data-i18n="instructions.tracing_short"></li>
               </ul>
 
-              <h3 class="h5" id="instructions-tools" data-i18n="instructions.tools_heading"></h3>
+              <h3 class="h5" id="instructions-tools" data-path="/instructions/tools" data-i18n="instructions.tools_heading"></h3>
               <p data-i18n="instructions.tools_intro"></p>
               <ul>
                   <li data-i18n="instructions.tool_trace"></li>
@@ -1805,7 +1805,7 @@
                   <li data-i18n="instructions.tool_measure"></li>
               </ul>
 
-              <h3 class="h5" id="instructions-measure" data-i18n="instructions.measure_heading"></h3>
+              <h3 class="h5" id="instructions-measure" data-path="/instructions/measure" data-i18n="instructions.measure_heading"></h3>
               <ul>
                   <li data-i18n="instructions.measure_modes"></li>
                   <li data-i18n="instructions.measure_ready"></li>
@@ -1817,14 +1817,14 @@
                   <li data-i18n="instructions.measure_options"></li>
               </ul>
 
-              <h3 class="h5" id="instructions-auto" data-i18n="instructions.auto_heading"></h3>
+              <h3 class="h5" id="instructions-auto" data-path="/instructions/auto" data-i18n="instructions.auto_heading"></h3>
               <ul>
                   <li data-i18n="instructions.auto_review"></li>
                   <li data-i18n="instructions.auto_add"></li>
                   <li data-i18n="instructions.auto_done"></li>
               </ul>
 
-              <h3 class="h5" id="instructions-legend" data-i18n="about.legend_heading"></h3>
+              <h3 class="h5" id="instructions-legend" data-path="/instructions/legend" data-i18n="about.legend_heading"></h3>
               <p data-i18n="about.legend_intro"></p>
               <ul class="about-legend">
                   <li><span class="about-swatch about-swatch-dots about-colour-component" aria-hidden="true"></span><span><strong data-i18n="about.legend_component_name"></strong> <span data-i18n="about.legend_component"></span></span></li>
@@ -1836,7 +1836,7 @@
                   <li><span class="about-swatch about-swatch-cross about-colour-click" aria-hidden="true"></span><span><strong data-i18n="about.legend_click_name"></strong> <span data-i18n="about.legend_click"></span></span></li>
               </ul>
 
-              <h3 class="h5" id="instructions-keys" data-i18n="about.keys_heading"></h3>
+              <h3 class="h5" id="instructions-keys" data-path="/instructions/keys" data-i18n="about.keys_heading"></h3>
               <ul>
                   <li data-i18n="about.key_click"></li>
                   <li data-i18n="about.key_arrows"></li>
@@ -1854,7 +1854,7 @@
           </section>
         </section>
 
-        <section class="view" data-view="about" id="about">
+        <section class="view" data-view="about" data-path="/about" id="about">
           <h2 class="view-title" data-i18n="about.heading"></h2>
           <p class="view-description" data-i18n="about.description"></p>
           <!-- What this app is and where it comes from: app.description, the
@@ -1878,14 +1878,14 @@
           <section class="card">
             <div class="card-body about">
               <p><i class="bi bi-github me-1" aria-hidden="true"></i><span data-i18n="about.source_label"></span> <a href="https://github.com/8529398670/AIS_Counter" target="_blank" rel="noopener noreferrer">github.com/8529398670/AIS_Counter</a></p>
-              <p><i class="bi bi-question-circle me-1" aria-hidden="true"></i><a href="#instructions" data-i18n="about.instructions_link"></a></p>
+              <p><i class="bi bi-question-circle me-1" aria-hidden="true"></i><a href="/instructions" data-i18n="about.instructions_link"></a></p>
               <nav class="about-toc">
-                <a href="#about-measures" data-i18n="about.measures_heading"></a>
-                <a href="#about-matlab" data-i18n="about.matlab_heading"></a>
-                <a href="#about-report" data-i18n="about.report_heading"></a>
+                <a href="/about/measures" data-i18n="about.measures_heading"></a>
+                <a href="/about/matlab" data-i18n="about.matlab_heading"></a>
+                <a href="/about/report" data-i18n="about.report_heading"></a>
               </nav>
 
-              <h3 class="h5" id="about-measures" data-i18n="about.measures_heading"></h3>
+              <h3 class="h5" id="about-measures" data-path="/about/measures" data-i18n="about.measures_heading"></h3>
               <dl class="about-measures">
                   <dt data-i18n="about.measure_length_name"></dt><dd data-i18n="about.measure_length"></dd>
                   <dt data-i18n="ais.m_start"></dt><dd data-i18n="about.measure_start"></dd>
@@ -1897,7 +1897,7 @@
                   <dt data-i18n="ais.m_trace"></dt><dd data-i18n="about.measure_trace"></dd>
               </dl>
 
-              <h3 class="h5" id="about-matlab" data-i18n="about.matlab_heading"></h3>
+              <h3 class="h5" id="about-matlab" data-path="/about/matlab" data-i18n="about.matlab_heading"></h3>
               <p data-i18n="about.matlab_intro"></p>
               <ul>
                   <li data-i18n="about.matlab_version"></li>
@@ -1907,7 +1907,7 @@
                   <li data-i18n="about.matlab_parity"></li>
               </ul>
 
-              <h3 class="h5" id="about-report" data-i18n="about.report_heading"></h3>
+              <h3 class="h5" id="about-report" data-path="/about/report" data-i18n="about.report_heading"></h3>
               <p class="text-body-secondary" data-i18n="about.report_intro"></p>
               <div id="about-report-body" class="about-report"><p class="text-body-secondary" data-i18n="about.report_loading"></p></div>
             </div>
@@ -1916,7 +1916,7 @@
 
         <!-- Your themes, and for admins the defaults everyone starts from.
              Drawn by themes_editor.js; see theme.js for where they are kept. -->
-        <section class="view view-full" data-view="appearance" id="appearance">
+        <section class="view view-full" data-view="appearance" data-path="/appearance" id="appearance">
           <h2 class="view-title" data-i18n="theme.heading"></h2>
           <ul class="nav nav-tabs mb-3" id="theme-tabs" role="tablist" hidden>
             <li class="nav-item" role="presentation">
@@ -1969,7 +1969,7 @@
           </section>
         </section>
 
-        <section class="view" data-view="users" id="admin-panel" hidden>
+        <section class="view" data-view="users" data-path="/admin/users" id="admin-panel" hidden>
           <h2 class="view-title" data-i18n="admin.heading"></h2>
           <p class="view-description" data-i18n="admin.description"></p>
 
@@ -2070,7 +2070,7 @@
         </section>
 
         <!-- One link a whole group can join through; see invites.js. -->
-        <section class="view" data-view="invite-links" id="invite-links-panel" hidden>
+        <section class="view" data-view="invite-links" data-path="/admin/invite-links" id="invite-links-panel" hidden>
           <h2 class="view-title" data-i18n="invite_links.heading"></h2>
           <p class="view-description" data-i18n="invite_links.description"></p>
 
@@ -2138,7 +2138,7 @@
 
         <!-- Every key in the app, whoever owns it: the admin answer to "what
              has standing access", and where a lost laptop's key gets killed. -->
-        <section class="view" data-view="all-keys" id="admin-keys-panel" hidden>
+        <section class="view" data-view="all-keys" data-path="/admin/api-keys" id="admin-keys-panel" hidden>
           <h2 class="view-title" data-i18n="admin_keys.heading"></h2>
           <p class="view-description" data-i18n="admin_keys.description"></p>
 
@@ -2221,7 +2221,7 @@
 
         <!-- The activity log, owner only; see logs.js. data-no-track keeps
              reading the log from writing to it (track.js). -->
-        <section class="view view-full" data-view="logs" id="logs-panel" data-no-track hidden>
+        <section class="view view-full" data-view="logs" data-path="/admin/logs" id="logs-panel" data-no-track hidden>
           <h2 class="view-title" data-i18n="logs.heading"></h2>
           <p class="view-description" data-i18n="logs.description"></p>
 
@@ -2306,7 +2306,7 @@
         </section>
 
         <!-- Background jobs, owner only; see jobs.js. -->
-        <section class="view" data-view="jobs" id="jobs-panel" hidden>
+        <section class="view" data-view="jobs" data-path="/admin/jobs" id="jobs-panel" hidden>
           <h2 class="view-title" data-i18n="jobs.heading"></h2>
           <p class="view-description" data-i18n="jobs.description"></p>
           <section class="card">
@@ -2331,7 +2331,7 @@
         </section>
 
         <!-- Owner only: config.yaml, one field per setting. See js/settings.js. -->
-        <section class="view" data-view="server-settings" id="server-settings-panel" hidden>
+        <section class="view" data-view="server-settings" data-path="/admin/settings" id="server-settings-panel" hidden>
           <h2 class="view-title" data-i18n="server_settings.heading"></h2>
           <p class="view-description" data-i18n="server_settings.description"></p>
           <section class="card">
