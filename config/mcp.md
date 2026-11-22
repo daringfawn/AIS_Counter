@@ -189,6 +189,7 @@ Make a new account and its first login link, to hand to the person. role is admi
 | `account_expires_at` | string (date-time) or null | no |  | When the account stops working (RFC 3339). Left out: never. expires_in_minutes is the login link's expiry, not this. |
 | `display_name` | string | yes | 1 to 80 characters |  |
 | `expires_in_minutes` | integer or null | no | 0 to 525600 | 0 never expires. Default auth.login_token_ttl_seconds for a link that works once, auth.multi_use_login_token_ttl_seconds otherwise. |
+| `kind` | string | no | one of `person`, `service`; default `person` | person, the default. service is refused (403 service_account): a service account is made by Connect on the owner's API keys screen. |
 | `max_uses` | integer or null | no | 0 to 1000 | Sign-ins the link allows: 1-1000, or 0 for unlimited. Default 1. |
 | `role` | string | yes | one of `admin`, `user`, `viewer` |  |
 
@@ -2152,6 +2153,7 @@ Routes an API key may call that have no tool, and why.
 | [`POST /api/bulk/ais/batches/reset`](api.md#post-apibulkaisbatchesreset) | Resetting many batches at once, all results included, is kept out of agents' reach on purpose. |
 | [`POST /api/bulk/ais/trash/purge`](api.md#post-apibulkaistrashpurge) | Deleting for good is kept out of agents' reach on purpose. |
 | [`POST /api/bulk/ais/trash/restore`](api.md#post-apibulkaistrashrestore) | The trash only holds what the Batches screen deleted, which agents cannot do. |
+| [`POST /api/keys/self/rotate`](api.md#post-apikeysselfrotate) | Makes an API key's credential, which no MCP tool does. |
 | [`POST /api/logout`](api.md#post-apilogout) | Ends a browser session; a key has none to end. |
 | [`POST /api/logs/events`](api.md#post-apilogsevents) | The browser's own activity reports (track.js), not an action. |
 | [`POST /mcp`](api.md#post-mcp) | The MCP endpoint itself. |

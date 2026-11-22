@@ -31,6 +31,7 @@ from app.core.middleware import EXCEPTION_HANDLERS, AppVersion, NoStore, RateLim
 from app.core.request_id import RequestID
 from app.core.request_log import RequestLog
 from app.core.security import LoadActor, ViewOnly
+from app.core.skill_origin import skill_origin
 from app.core.static_files import StaticServer
 from app.routes import build_routes
 
@@ -144,6 +145,8 @@ def build_app(
     app.state.matlab_jobs = matlab_jobs.Jobs()
     # Reported to MCP clients as serverInfo.version.
     app.state.version = version
+    # Reported by /api/me, so ProjectPortal can tell an app behind its template.
+    app.state.skill, app.state.skill_commit = skill_origin()
     app.state.live_reload = reload_watcher
     return app
 
