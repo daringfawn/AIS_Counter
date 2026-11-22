@@ -197,8 +197,8 @@ const Api = {
     return this.post( "/api/owner/users/" + userId + "/password-access" , { allowed: allowed } );
   },
   listInvites( offset , params ) { return this.request( "/api/admin/invite-links" + this.query( { offset: offset , ...params } ) ); },
-  createInvite( label , maxUses , days ) {
-    return this.post( "/api/admin/invite-links" , { label: label , max_uses: maxUses , days: days } );
+  createInvite( label , maxUses , days , role ) {
+    return this.post( "/api/admin/invite-links" , { label: label , max_uses: maxUses , days: days , role: role || "user" } );
   },
   renameInvite( linkId , label , expect ) {
     return this.post( "/api/admin/invite-links/" + encodeURIComponent( linkId ) + "/rename" , { label: label , expect: expect } );
@@ -229,6 +229,11 @@ const Api = {
   // Whether one of your own keys may make a login link for your account.
   setKeySignIn( keyId , on ) {
     return this.post( "/api/keys/" + encodeURIComponent( keyId ) + "/sign-in" , { may_sign_in: on } );
+  },
+  // Whether one of the owner's own admin keys may mint keys for other
+  // accounts (an outside admin tool such as ProjectPortal). Owner only.
+  setKeyMintKeys( keyId , on ) {
+    return this.post( "/api/keys/" + encodeURIComponent( keyId ) + "/mint-keys" , { may_mint_keys: on } );
   },
   revokeKey( keyId )           { return this.post( "/api/keys/" + encodeURIComponent( keyId ) + "/revoke" ); },
   deleteKey( keyId )           { return this.post( "/api/keys/" + encodeURIComponent( keyId ) + "/delete" ); },

@@ -8,6 +8,10 @@
       "route": "GET /api/about/report"
     },
     {
+      "reason": "Manages API keys, which no MCP tool does.",
+      "route": "GET /api/admin/users/{user_id}/keys"
+    },
+    {
       "reason": "Viewer images for the Process screen; get_image gives an agent the processed view.",
       "route": "GET /api/ais/files/{sha}/channel/{index}.png"
     },
@@ -78,6 +82,14 @@
     {
       "reason": "The MCP reference itself, for people; tools/list gives the same list.",
       "route": "GET /api/mcp.md"
+    },
+    {
+      "reason": "Manages API keys, which no MCP tool does.",
+      "route": "POST /api/admin/keys/{key_id}/revoke"
+    },
+    {
+      "reason": "Makes an API key, which no MCP tool does.",
+      "route": "POST /api/admin/users/{user_id}/keys"
     },
     {
       "reason": "A backup zip: MCP messages are JSON, and clients cap their size. Send it over HTTP with the same key.",
@@ -241,7 +253,7 @@
         "readOnlyHint": false,
         "title": "Create an invite link (admin)"
       },
-      "description": "One link for a group: each person who opens it joins as a new user, up to max_uses people, for days days. Answers with join_url (shown only now) and the link's details. Revoking or deleting this API key switches the link off.",
+      "description": "One link for a group: each person who opens it joins as a new account with role (user, the default, or viewer), up to max_uses people, for days days. Answers with join_url (shown only now) and the link's details. Revoking or deleting this API key switches the link off.",
       "inputSchema": {
         "additionalProperties": false,
         "properties": {
@@ -259,6 +271,15 @@
             "maximum": 1000,
             "minimum": 1,
             "type": "integer"
+          },
+          "role": {
+            "default": "user",
+            "description": "The role each person who joins gets: user, or viewer (reads only).",
+            "enum": [
+              "user",
+              "viewer"
+            ],
+            "type": "string"
           }
         },
         "required": [
@@ -280,10 +301,18 @@
         "readOnlyHint": false,
         "title": "Create an account (admin)"
       },
-      "description": "Make a new account and its first login link, to hand to the person. role is admin or user. Answers with user_id and the link. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.",
+      "description": "Make a new account and its first login link, to hand to the person. role is admin, user or viewer (reads only). account_expires_at, when given, is when the account stops working. Answers with user_id and the link. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.",
       "inputSchema": {
         "additionalProperties": false,
         "properties": {
+          "account_expires_at": {
+            "description": "When the account stops working (RFC 3339). Left out: never. expires_in_minutes is the login link's expiry, not this.",
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "display_name": {
             "maxLength": 80,
             "minLength": 1,
@@ -310,7 +339,8 @@
           "role": {
             "enum": [
               "admin",
-              "user"
+              "user",
+              "viewer"
             ],
             "type": "string"
           }
@@ -1486,16 +1516,53 @@
         "destructiveHint": false,
         "openWorldHint": false,
         "readOnlyHint": false,
+        "title": "Set when an account expires (admin)"
+      },
+      "description": "expires_at is when the account stops working (RFC 3339), or null for never. Once it passes the account counts as disabled: sign-in, its sessions and its keys stop, and housekeeping disables it and revokes its access. A later expiry does not re-enable an account housekeeping already disabled. It must be in the future. The owner's account never expires; only the owner sets an admin's.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "expires_at": {
+            "description": "When the account stops working (RFC 3339), or null for never.",
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "user_id": {
+            "description": "The account's id, from GET /api/admin/users (admin_list_users over MCP).",
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "expires_at",
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "name": "admin_set_user_expiry",
+      "route": "POST /api/admin/users/{user_id}/expiry",
+      "title": "Set when an account expires (admin)"
+    },
+    {
+      "adminOnly": true,
+      "annotations": {
+        "destructiveHint": false,
+        "openWorldHint": false,
+        "readOnlyHint": false,
         "title": "Change an account's role (admin)"
       },
-      "description": "Make an account an admin or an ordinary user. Only the owner takes an admin's rights away; the owner is always an admin, and nobody changes their own role. Becoming an admin ends the account's sessions and live login link.",
+      "description": "Make an account an admin, an ordinary user, or a viewer, who may read but change nothing. Only the owner takes an admin's rights away; the owner is always an admin, and nobody changes their own role. Becoming an admin ends the account's sessions and live login link.",
       "inputSchema": {
         "additionalProperties": false,
         "properties": {
           "role": {
             "enum": [
               "admin",
-              "user"
+              "user",
+              "viewer"
             ],
             "type": "string"
           },
@@ -1535,7 +1602,8 @@
                 "role": {
                   "enum": [
                     "admin",
-                    "user"
+                    "user",
+                    "viewer"
                   ],
                   "type": "string"
                 },
@@ -1561,7 +1629,8 @@
               "role": {
                 "enum": [
                   "admin",
-                  "user"
+                  "user",
+                  "viewer"
                 ],
                 "type": "string"
               }

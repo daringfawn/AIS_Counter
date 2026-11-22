@@ -36,10 +36,12 @@ class Me(Reply, kw_only=True):
 
     api_name: ClassVar[str] = "Me"
     authenticated: bool
+    contract: Annotated[int, Meta(description="Which version of the portal contract this app speaks (ProjectPortal's CROSS_PROJECT.md).")]
+    capabilities: Annotated[list[str], Meta(description="The optional parts of that contract this app has on now: viewer_role, account_expiry, key_minting, invite_links, key_sign_in.")]
     id: int
     display_name: str
-    role: Annotated[str, Meta(description="The effective role: never higher than an API key's own.")]
-    account_role: str
+    role: Annotated[Literal["admin", "user", "viewer"], Meta(description="The effective role: never higher than an API key's own. A viewer may read, and change nothing.")]
+    account_role: Literal["admin", "user", "viewer"]
     is_owner: bool
     login_link: Annotated[LoginLink | None, Meta(description="Your own live login link, or null.")]
     maintenance: Annotated[Literal["none", "read_only", "full"], Meta(extra_json_schema={"x-feature": "maintenance"})]
@@ -74,6 +76,7 @@ class Me(Reply, kw_only=True):
     api_key_id: Annotated[str, Meta(description="API keys only.", extra_json_schema={"x-feature": "api_keys"})] | UnsetType = UNSET
     api_key_name: Annotated[str, Meta(description="API keys only.", extra_json_schema={"x-feature": "api_keys"})] | UnsetType = UNSET
     matlab_path: Annotated[str, Meta(description="Where MATLAB is on your computer, for your replay zips. Browser sessions only.")] | UnsetType = UNSET
+    may_mint_keys: Annotated[bool, Meta(description="API keys only: whether this key may make keys for other accounts.", extra_json_schema={"x-feature": "api_keys"})] | UnsetType = UNSET
 
 
 @route(
@@ -104,10 +107,12 @@ def me(request: Request) -> Me:
     link = login_tokens.live_login_link(store, actor.user.id)
     reply = Me(
         authenticated=True,
+        contract=PORTAL_CONTRACT,
+        capabilities=capabilities(cfg),
         id=actor.user.id,
         display_name=actor.user.display_name,
-        role=actor.role,
-        account_role=actor.user.role,
+        role=actor.role,  # type: ignore[arg-type]
+        account_role=actor.user.role,  # type: ignore[arg-type]
         is_owner=actor.user.id == owner_id,
         login_link=LoginLink(**link) if link is not None else None,
         maintenance=cfg.maintenance,
@@ -151,7 +156,27 @@ def me(request: Request) -> Me:
     if actor.api_key is not None:
         reply.api_key_id = actor.api_key.id
         reply.api_key_name = actor.api_key.name
+        reply.may_mint_keys = actor.api_key.may_mint_keys
     return reply
+
+
+# The portal contract version this template speaks (ProjectPortal's
+# CROSS_PROJECT.md, "Portal contract v2"). The portal turns a part of its
+# Manage screen on only when capabilities lists it.
+PORTAL_CONTRACT = 2
+
+
+def capabilities(cfg: Config) -> list[str]:
+    """The parts of the portal contract this app answers right now. Features
+    switched off while the server runs drop out of the list with them."""
+    found = ["viewer_role", "account_expiry"]
+    if cfg.api_keys_enabled:
+        found.append("key_minting")
+    if cfg.invite_links_enabled:
+        found.append("invite_links")
+    if cfg.api_keys_enabled:
+        found.append("key_sign_in")
+    return found
 
 
 def open_api_url(cfg: Config) -> str:

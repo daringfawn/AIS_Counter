@@ -41,6 +41,7 @@ Every tool POST /mcp offers. Written by scripts/api_docs.sh from the registered 
 | [`admin_set_theme_defaults`](#admin_set_theme_defaults) | [`POST /api/admin/theme-defaults`](api.md#post-apiadmintheme-defaults) | admin keys | Replace the default themes (admin) |
 | [`admin_set_user_disabled`](#admin_set_user_disabled) | [`POST /api/admin/users/{user_id}/disabled`](api.md#post-apiadminusersuser_iddisabled) | admin keys | Disable or enable a user (admin) |
 | [`admin_set_user_disabled_bulk`](#admin_set_user_disabled_bulk) | [`POST /api/bulk/admin/users/disabled`](api.md#post-apibulkadminusersdisabled) | admin keys | Disable or enable a user, for many at once (admin) |
+| [`admin_set_user_expiry`](#admin_set_user_expiry) | [`POST /api/admin/users/{user_id}/expiry`](api.md#post-apiadminusersuser_idexpiry) | admin keys | Set when an account expires (admin) |
 | [`admin_set_user_role`](#admin_set_user_role) | [`POST /api/admin/users/{user_id}/role`](api.md#post-apiadminusersuser_idrole) | admin keys | Change an account's role (admin) |
 | [`admin_set_user_role_bulk`](#admin_set_user_role_bulk) | [`POST /api/bulk/admin/users/role`](api.md#post-apibulkadminusersrole) | admin keys | Change an account's role, for many at once (admin) |
 | [`admin_switch_on_invite_link`](#admin_switch_on_invite_link) | [`POST /api/admin/invite-links/{link_id}/switch-on`](api.md#post-apiadmininvite-linkslink_idswitch-on) | admin keys | Switch an invite link back on (admin) |
@@ -154,7 +155,7 @@ Runs admin_cancel_login_link once per item: items holds each call's arguments, s
 
 ## admin_create_invite_link
 
-One link for a group: each person who opens it joins as a new user, up to max_uses people, for days days. Answers with join_url (shown only now) and the link's details. Revoking or deleting this API key switches the link off.
+One link for a group: each person who opens it joins as a new account with role (user, the default, or viewer), up to max_uses people, for days days. Answers with join_url (shown only now) and the link's details. Revoking or deleting this API key switches the link off.
 
 |  |  |
 |---|---|
@@ -169,10 +170,11 @@ One link for a group: each person who opens it joins as a new user, up to max_us
 | `days` | integer | yes | 1 to 365 |  |
 | `label` | string | yes | 1 to 80 characters |  |
 | `max_uses` | integer | yes | 1 to 1000 |  |
+| `role` | string | no | one of `user`, `viewer`; default `user` | The role each person who joins gets: user, or viewer (reads only). |
 
 ## admin_create_user
 
-Make a new account and its first login link, to hand to the person. role is admin or user. Answers with user_id and the link. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.
+Make a new account and its first login link, to hand to the person. role is admin, user or viewer (reads only). account_expires_at, when given, is when the account stops working. Answers with user_id and the link. Answers with login_url (open it to sign in), expires_at and max_uses. The link works once and expires within a day (links made with an API key are held to that; a browser can make longer or reusable ones). Any older link the account could still use stops working; its signed-in devices stay signed in. Revoking or deleting this API key voids the link while it is unused, and signs out every device it signed in.
 
 |  |  |
 |---|---|
@@ -184,10 +186,11 @@ Make a new account and its first login link, to hand to the person. role is admi
 
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
+| `account_expires_at` | string (date-time) or null | no |  | When the account stops working (RFC 3339). Left out: never. expires_in_minutes is the login link's expiry, not this. |
 | `display_name` | string | yes | 1 to 80 characters |  |
 | `expires_in_minutes` | integer or null | no | 0 to 525600 | 0 never expires. Default auth.login_token_ttl_seconds for a link that works once, auth.multi_use_login_token_ttl_seconds otherwise. |
 | `max_uses` | integer or null | no | 0 to 1000 | Sign-ins the link allows: 1-1000, or 0 for unlimited. Default 1. |
-| `role` | string | yes | one of `admin`, `user` |  |
+| `role` | string | yes | one of `admin`, `user`, `viewer` |  |
 
 ## admin_delete_invite_link
 
@@ -653,9 +656,26 @@ Runs admin_set_user_disabled once per item: items holds each call's arguments, s
 | `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
 | `shared.disabled` | boolean | no |  |  |
 
+## admin_set_user_expiry
+
+expires_at is when the account stops working (RFC 3339), or null for never. Once it passes the account counts as disabled: sign-in, its sessions and its keys stop, and housekeeping disables it and revokes its access. A later expiry does not re-enable an account housekeeping already disabled. It must be in the future. The owner's account never expires; only the owner sets an admin's.
+
+|  |  |
+|---|---|
+| Route | [`POST /api/admin/users/{user_id}/expiry`](api.md#post-apiadminusersuser_idexpiry) |
+| Read only | no |
+| Destructive | no |
+
+**Arguments**
+
+| Field | Type | Required | Limits | Description |
+|---|---|---|---|---|
+| `expires_at` | string (date-time) or null | yes |  | When the account stops working (RFC 3339), or null for never. |
+| `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
+
 ## admin_set_user_role
 
-Make an account an admin or an ordinary user. Only the owner takes an admin's rights away; the owner is always an admin, and nobody changes their own role. Becoming an admin ends the account's sessions and live login link.
+Make an account an admin, an ordinary user, or a viewer, who may read but change nothing. Only the owner takes an admin's rights away; the owner is always an admin, and nobody changes their own role. Becoming an admin ends the account's sessions and live login link.
 
 |  |  |
 |---|---|
@@ -667,7 +687,7 @@ Make an account an admin or an ordinary user. Only the owner takes an admin's ri
 
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
-| `role` | string | yes | one of `admin`, `user` |  |
+| `role` | string | yes | one of `admin`, `user`, `viewer` |  |
 | `user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
 
 ## admin_set_user_role_bulk
@@ -685,10 +705,10 @@ Runs admin_set_user_role once per item: items holds each call's arguments, share
 | Field | Type | Required | Limits | Description |
 |---|---|---|---|---|
 | `items` | array of object | yes |  | One entry per thing to change: its id, and any field that differs from shared. |
-| `items[].role` | string | no | one of `admin`, `user` |  |
+| `items[].role` | string | no | one of `admin`, `user`, `viewer` |  |
 | `items[].user_id` | integer | yes | at least 1 | The account's id, from GET /api/admin/users (admin_list_users over MCP). |
 | `shared` | object | no |  | Fields every item gets, unless the item sets its own. |
-| `shared.role` | string | no | one of `admin`, `user` |  |
+| `shared.role` | string | no | one of `admin`, `user`, `viewer` |  |
 
 ## admin_switch_on_invite_link
 
@@ -2096,6 +2116,7 @@ Routes an API key may call that have no tool, and why.
 | Route | Why |
 |---|---|
 | [`GET /api/about/report`](api.md#get-apiaboutreport) | The About screen's copy of a document in the repository; nothing to act on. |
+| [`GET /api/admin/users/{user_id}/keys`](api.md#get-apiadminusersuser_idkeys) | Manages API keys, which no MCP tool does. |
 | [`GET /api/ais/files/{sha}/channel/{index}.png`](api.md#get-apiaisfilesshachannelindexpng) | Viewer images for the Process screen; get_image gives an agent the processed view. |
 | [`GET /api/ais/files/{sha}/channel/{index}.tif`](api.md#get-apiaisfilesshachannelindextif) | File bytes: MCP messages are JSON, and clients cap their size. Fetch it over HTTP with the same key. |
 | [`GET /api/ais/files/{sha}/channels`](api.md#get-apiaisfilesshachannels) | Viewer detail for the Process screen's channel picker; get_batch names each image's files. |
@@ -2114,6 +2135,8 @@ Routes an API key may call that have no tool, and why.
 | [`GET /api/api.md`](api.md#get-apiapimd) | The API reference itself, for people; GET /api/api.json is the same as JSON. |
 | [`GET /api/mcp.json`](api.md#get-apimcpjson) | The MCP reference itself; tools/list gives the same list. |
 | [`GET /api/mcp.md`](api.md#get-apimcpmd) | The MCP reference itself, for people; tools/list gives the same list. |
+| [`POST /api/admin/keys/{key_id}/revoke`](api.md#post-apiadminkeyskey_idrevoke) | Manages API keys, which no MCP tool does. |
+| [`POST /api/admin/users/{user_id}/keys`](api.md#post-apiadminusersuser_idkeys) | Makes an API key, which no MCP tool does. |
 | [`POST /api/ais/batches/import`](api.md#post-apiaisbatchesimport) | A backup zip: MCP messages are JSON, and clients cap their size. Send it over HTTP with the same key. |
 | [`POST /api/ais/batches/import/missing`](api.md#post-apiaisbatchesimportmissing) | A backup zip: MCP messages are JSON, and clients cap their size. Send it over HTTP with the same key. |
 | [`POST /api/ais/batches/{batch_id}/activity`](api.md#post-apiaisbatchesbatch_idactivity) | The Process screen reporting that someone is working on a batch, not an action. |

@@ -339,6 +339,10 @@ progress { accent-color: var(--app-second); }
    mouse. On a touch screen they get the floor too, which a row can afford now
    that most of its buttons are in a menu -- except on the Process screen
    (#ais-panel), whose tool rows are packed small buttons on purpose. */
+/* A button's label never wraps and a flex row never squeezes it: the 44px
+   floor below replaces the button's own minimum width, so without this a
+   long neighbour (a link in .link-box) crushes "Copy" onto two lines. */
+.btn { white-space: nowrap; flex-shrink: 0; }
 .btn:not(.btn-sm) { min-height: 44px; }
 @media (pointer: coarse), (max-width: 575.98px) {
   .btn-sm:not(#ais-panel .btn-sm) { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
@@ -374,6 +378,10 @@ progress { accent-color: var(--app-second); }
 .nav-link-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
 .nav-link-sub { font-size: 0.8rem; opacity: 0.75; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nav-link-sub:empty { display: none; }
+/* A viewer changes nothing (the server's ViewOnly guard refuses it with 403
+   view_only), so the controls that would, marked data-write, are not shown.
+   App.init sets data-view-only on <html> for a viewer. */
+html[data-view-only] [data-write] { display: none !important; }
 .sidebar-heading {
   margin: 1rem 0 0.25rem;
   padding: 0 var(--bs-nav-link-padding-x);
@@ -525,7 +533,6 @@ html { scrollbar-gutter: stable; overflow-anchor: auto; }
 .table > tbody > tr:nth-child(even) > * { --bs-table-bg: var(--app-row-even); }
 .row-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 td .row-actions { flex-wrap: nowrap; }
-.row-actions .btn { white-space: nowrap; }
 .row-menu-toggle .spinner-border { margin-right: 0 !important; }
 .row-menu-toggle[aria-busy="true"] .bi { display: none; }
 

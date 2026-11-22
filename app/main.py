@@ -30,7 +30,7 @@ from app.core.maintenance import Maintenance
 from app.core.middleware import EXCEPTION_HANDLERS, AppVersion, NoStore, RateLimit, SecurityHeaders
 from app.core.request_id import RequestID
 from app.core.request_log import RequestLog
-from app.core.security import LoadActor
+from app.core.security import LoadActor, ViewOnly
 from app.core.static_files import StaticServer
 from app.routes import build_routes
 
@@ -120,6 +120,7 @@ def build_app(
             Middleware(RateLimit, settings=settings, logger=logger),
             Middleware(LoadActor, store=store, settings=settings),
             Middleware(RequestLog, settings=settings, logger=logger),
+            Middleware(ViewOnly),
             Middleware(Maintenance, store=store, settings=settings),
         ],
         exception_handlers=EXCEPTION_HANDLERS,
