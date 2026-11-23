@@ -298,7 +298,7 @@ Group invite links, a page at a time: label, places used and left, expiry, and w
 
 ## admin_list_user_sessions
 
-Where an account is signed in: every session, with when it started and was last seen. Addresses are shown to the owner only, and only the owner sees the owner's.
+Where an account is signed in: every session, with when it started and was last seen. Addresses are shown to the owner and service accounts only. Nobody sees the owner's, and only the owner sees another admin's.
 
 |  |  |
 |---|---|
@@ -659,7 +659,7 @@ Runs admin_set_user_disabled once per item: items holds each call's arguments, s
 
 ## admin_set_user_expiry
 
-expires_at is when the account stops working (RFC 3339), or null for never. Once it passes the account counts as disabled: sign-in, its sessions and its keys stop, and housekeeping disables it and revokes its access. A later expiry does not re-enable an account housekeeping already disabled. It must be in the future. The owner's account never expires; only the owner sets an admin's.
+expires_at is when the account stops working (RFC 3339), or null for never. Once it passes the account counts as disabled: sign-in, its sessions and its keys stop, and housekeeping disables it and revokes its access. A later expiry does not re-enable an account housekeeping already disabled. It must be in the future. The owner's account never expires, nobody sets their own, and only the owner sets an admin's.
 
 |  |  |
 |---|---|

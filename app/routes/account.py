@@ -26,6 +26,8 @@ from app.models import two_factor
 from app.routes.api_docs_md import api_doc_url
 from app.routes.api_docs_md import mcp_doc_url
 from app.routes.admin import CancelLoginLinkReply, DisplayName, ExpiresInMinutes, LoginLink, LoginLinkReply, MaxUses, OkReply, RenameUserReply, link_options, link_reply
+from app.routes.admin import key_login_link_options, refuse_key_without_sign_in
+from app.routes.helpers import refuse_key_born
 from app.routes.helpers import Refused, get_config, get_store, run
 from app.routes.helpers import DateTime
 from app.routes.logs import audit
@@ -53,7 +55,7 @@ class Me(Reply, kw_only=True):
     api_name: ClassVar[str] = "Me"
     authenticated: bool
     contract: Annotated[int, Meta(description="Which version of the portal contract this app speaks: the Portal contract section of the webserver skills' SKILL.md.")]
-    capabilities: Annotated[list[str], Meta(description="The optional parts of that contract this app has on now: viewer_role, account_expiry, key_minting, invite_links, key_sign_in, service_accounts, key_grants, error_codes, key_rotation.")]
+    capabilities: Annotated[list[str], Meta(description="The optional parts of that contract this app has on now: viewer_role, account_expiry, key_minting, invite_links, key_sign_in, service_accounts, key_grants, error_codes, key_rotation, admin_sessions.")]
     id: int
     display_name: str
     role: Annotated[Literal["admin", "user", "viewer"], Meta(description="The effective role: never higher than an API key's own. A viewer may read, and change nothing.")]
@@ -216,6 +218,7 @@ def capabilities(cfg: Config) -> list[str]:
     found.append("error_codes")
     if cfg.api_keys_enabled:
         found.append("key_rotation")
+    found.append("admin_sessions")
     return found
 
 
@@ -326,6 +329,7 @@ def set_matlab_path(request: Request, body: SetMatlabPath) -> SetMatlabPathReply
 def set_pin(request: Request, body: SetPIN) -> SetPINReply:
     """Set, or with an empty pin clear, the PIN asked for when this account
     signs back in through an invite link (see app/models/pins.py)."""
+    refuse_key_born(request)
     try:
         if not pins.set_user_pin(get_store(request), actor_from(request).user.id, body.pin):
             raise Refused.internal("set pin: the signed-in account has no record")
@@ -367,14 +371,9 @@ def create_my_login_link(request: Request, body: MyLoginLink) -> LoginLinkReply:
     minutes, whatever it asked for, and revoking the key voids it while it is
     unused."""
     actor = actor_from(request)
-    if actor.api_key is not None and not actor.api_key.may_sign_in:
-        raise Refused(403, "this key may not make sign-in links: turn that on for it on the API keys card")
+    refuse_key_without_sign_in(request)
     options = link_options(request, body)
-    if actor.api_key is not None:
-        ttl = options.ttl_seconds
-        if ttl <= 0 or ttl > api_keys.KEY_LOGIN_LINK_TTL_SECONDS:
-            ttl = api_keys.KEY_LOGIN_LINK_TTL_SECONDS
-        options = replace(options, max_uses=1, unlimited=False, ttl_seconds=ttl)
+    options = key_login_link_options(request, options)
     credential, info = login_tokens.issue_login_link(get_store(request), actor.user.id, options)
     detail = {"max_uses": info["max_uses"], "expires_at": info["expires_at"]}
     if actor.via_api_key:

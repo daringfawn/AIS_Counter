@@ -25,7 +25,7 @@ from app.core.config_live import Holder
 from app.core.db import Store
 from app.core.middleware import internal_error
 from app.models import RestoreError, RestoreForbiddenError, RestoreGoneError, RestoreOutrankedError
-from app.core.error_codes import CODE_INVALID, CODE_OWNER_PROTECTED, CODE_OWNER_REQUIRED, CODE_SERVICE_ACCOUNT, error_body
+from app.core.error_codes import CODE_INVALID, CODE_OWNER_PROTECTED, CODE_OWNER_REQUIRED, CODE_SERVICE_ACCOUNT, CODE_SESSION_ONLY, error_body
 from app.models.users import OwnerProtectedError, OwnerRequiredError, ServiceAccountError
 
 run = run_in_threadpool
@@ -219,6 +219,18 @@ def conflict(message: str, **extra: Any) -> JSONResponse:
 
 def error(status: int, message: str) -> JSONResponse:
     return JSONResponse({"error": message}, status_code=status)
+
+
+def refuse_key_born(request: Request) -> None:
+    """Refuse, as session_only, a request from a browser session a key's login
+    link opened (Actor.key_born) when it asks for a way in that would not
+    answer to that key: a password, a PIN, two-factor, or a new secret for
+    another key. Revoking the key ends the session and everything else it made
+    (Actor.lineage_key); these would outlive it."""
+    from app.core.security import actor_from  # here: security imports this module's neighbours
+    actor = actor_from(request)
+    if actor is not None and actor.key_born:
+        raise Refused(403, "this needs a session you signed in to yourself, not one an API key's login link opened", code=CODE_SESSION_ONLY)
 
 
 def service_account_refusal() -> Refused:
